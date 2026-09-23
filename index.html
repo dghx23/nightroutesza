@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Night Routes · Every story is a map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0D17;--bg-raised:#11141F;--bg-card:#161A2A;--bg-elevated:#1E2338;
+  --border:rgba(255,255,255,.07);--border-strong:rgba(255,255,255,.14);--border-hi:rgba(255,255,255,.22);
+  --text:#EDEFF7;--text-dim:rgba(237,239,247,.68);--text-mute:rgba(237,239,247,.42);--text-faint:rgba(237,239,247,.28);
+  --pink:#FF4D8F;--pink-soft:rgba(255,77,143,.14);
+  --cyan:#3EE8D8;--cyan-soft:rgba(62,232,216,.13);
+  --amber:#FFB547;--red:#FF5C5C;--green:#4ADE80;--violet:#A78BFA;
+  --radius-sm:8px;--radius:12px;--radius-lg:16px;--radius-xl:20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.65;font-size:15px;overflow-x:hidden;padding-bottom:64px;-webkit-font-smoothing:antialiased;position:relative}
+body::before{content:"";position:fixed;top:-20%;right:-20%;width:80vw;height:80vw;background:radial-gradient(circle,rgba(255,77,143,.07),transparent 60%);pointer-events:none;z-index:0}
+body::after{content:"";position:fixed;bottom:-30%;left:-20%;width:80vw;height:80vw;background:radial-gradient(circle,rgba(62,232,216,.05),transparent 60%);pointer-events:none;z-index:0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.wrap-narrow{max-width:780px}
+
+.cnote{background:linear-gradient(90deg,rgba(255,77,143,.14),rgba(167,139,250,.14));border-bottom:1px solid rgba(255,77,143,.2);color:var(--text);font-size:.79rem;text-align:center;padding:9px 22px;position:relative;z-index:60;line-height:1.5}
+.cnote strong{color:var(--pink);font-weight:600}
+.cnote .close{background:none;border:none;color:var(--text-mute);cursor:pointer;margin-left:14px;font-size:.95rem}
+.cnote .close:hover{color:var(--text)}
+.cnote.hidden{display:none}
+
+header{position:sticky;top:0;z-index:80;background:rgba(11,13,23,.82);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--border)}
+.hdr{display:flex;align-items:center;justify-content:space-between;height:66px;gap:20px}
+.brand{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:-.015em;text-decoration:none;color:inherit;flex-shrink:0}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--pink),var(--violet));position:relative;flex:none;box-shadow:0 4px 16px rgba(255,77,143,.35)}
+.brand .mark::after{content:"";position:absolute;inset:7px;background:var(--bg);border-radius:4px}
+.brand .mark::before{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:10px;height:2px;background:linear-gradient(90deg,var(--pink),var(--cyan));border-radius:2px;z-index:2}
+.brand .thin{font-weight:400;opacity:.5}
+nav{display:flex;gap:6px;font-size:.83rem;font-weight:500;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav a{color:var(--text-dim);text-decoration:none;padding:8px 12px;border-radius:100px;transition:all .18s;white-space:nowrap}
+nav a:hover{color:var(--text);background:rgba(255,255,255,.05)}
+nav a.active{color:var(--text);background:var(--pink-soft);border:1px solid rgba(255,77,143,.3);box-shadow:0 0 20px rgba(255,77,143,.15)}
+.menu-btn{display:none;background:rgba(255,255,255,.05);border:1px solid var(--border-strong);color:var(--text);width:38px;height:38px;border-radius:10px;cursor:pointer;align-items:center;justify-content:center;font-size:1.1rem}
+.mobile-nav{display:none;position:fixed;top:66px;left:0;right:0;bottom:0;background:var(--bg);z-index:79;padding:16px 20px 80px;overflow-y:auto;border-top:1px solid var(--border)}
+.mobile-nav.open{display:block}
+.mobile-nav a{display:block;padding:15px 12px;font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:1rem;text-decoration:none;color:var(--text);border-bottom:1px solid var(--border);transition:all .18s}
+.mobile-nav a:hover{background:rgba(255,255,255,.04);color:var(--pink);padding-left:18px}
+@media(max-width:1050px){nav{display:none}.menu-btn{display:flex}}
+
+.hero{padding:88px 0 72px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-40%;right:-15%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,77,143,.14),transparent 65%);border-radius:50%;pointer-events:none}
+.hero::after{content:"";position:absolute;bottom:-30%;left:-10%;width:500px;height:500px;background:radial-gradient(circle,rgba(62,232,216,.1),transparent 65%);border-radius:50%;pointer-events:none}
+.hero .wrap{position:relative;z-index:2}
+.crumb{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;color:var(--text-mute);margin-bottom:22px;flex-wrap:wrap}
+.crumb a{color:var(--text-mute);text-decoration:none}
+.crumb a:hover{color:var(--text)}
+.crumb .sep{opacity:.4}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--pink);background:var(--pink-soft);border:1px solid rgba(255,77,143,.24);padding:6px 14px;border-radius:100px;margin-bottom:22px;font-weight:600}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--pink);box-shadow:0 0 10px var(--pink);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.85)}}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(2.4rem,6.5vw,4.4rem);line-height:1.02;letter-spacing:-.035em;margin-bottom:22px}
+.hero h1 em{font-style:italic;background:linear-gradient(135deg,var(--pink) 0%,var(--violet) 50%,var(--cyan) 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p.lede{font-size:1.08rem;line-height:1.7;color:var(--text-dim);max-width:60ch;margin-bottom:32px}
+.hero .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero .meta{display:flex;gap:22px;flex-wrap:wrap;font-size:.8rem;color:var(--text-mute);margin-top:26px}
+.hero .meta span{display:flex;align-items:center;gap:7px}
+.hero .meta span::before{content:"◆";color:var(--pink);font-size:.6rem}
+.hero.small{padding:64px 0 48px}
+.hero.small h1{font-size:clamp(1.9rem,4.8vw,2.9rem)}
+
+section{padding:64px 0;position:relative;z-index:1}
+section.alt{background:linear-gradient(180deg,transparent,rgba(255,255,255,.012) 20%,rgba(255,255,255,.012) 80%,transparent)}
+.sec-label{font-family:'Space Grotesk',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;font-weight:600;display:flex;align-items:center;gap:10px}
+.sec-label::before{content:"";width:24px;height:1px;background:var(--cyan);opacity:.5}
+h2.sec-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.12;letter-spacing:-.025em;margin-bottom:14px}
+.sec-sub{font-size:.98rem;color:var(--text-dim);max-width:64ch;margin-bottom:40px;line-height:1.7}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.9rem 1.7rem;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.9rem;text-decoration:none;transition:all .2s;border:none;cursor:pointer;white-space:nowrap}
+.btn.solid{background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff;box-shadow:0 8px 24px rgba(255,77,143,.32)}
+.btn.solid:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,77,143,.45)}
+.btn.line{background:transparent;border:1px solid var(--border-strong);color:var(--text)}
+.btn.line:hover{background:rgba(255,255,255,.05);border-color:var(--border-hi);transform:translateY(-2px)}
+
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+
+.tcard{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.008));border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px 24px;transition:all .25s;position:relative;overflow:hidden}
+.tcard::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent)}
+.tcard:hover{border-color:var(--border-strong);transform:translateY(-3px)}
+.tcard .n{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.14em;color:var(--pink);margin-bottom:14px;font-weight:600}
+.tcard h3{font-family:'Space Grotesk',sans-serif;font-size:1.12rem;font-weight:600;margin-bottom:10px;letter-spacing:-.015em;line-height:1.25}
+.tcard p{font-size:.88rem;color:var(--text-dim);line-height:1.65}
+
+.statcard{background:linear-gradient(135deg,rgba(255,77,143,.05),rgba(167,139,250,.03));border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 24px}
+.statcard.urgent{background:linear-gradient(135deg,rgba(255,92,92,.08),rgba(255,77,143,.04));border-color:rgba(255,92,92,.2)}
+.statcard .v{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:700;line-height:1;letter-spacing:-.04em;margin-bottom:12px;background:linear-gradient(135deg,var(--pink),var(--violet));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.statcard.urgent .v{background:linear-gradient(135deg,var(--red),var(--pink));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.statcard .k{font-size:.85rem;color:var(--text-dim);line-height:1.55}
+
+.module{background:linear-gradient(180deg,var(--bg-card),var(--bg-raised));border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;margin-bottom:26px;position:relative}
+.module::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,77,143,.35),transparent)}
+.mod-head{padding:26px 30px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap}
+.mod-head h3{font-family:'Space Grotesk',sans-serif;font-size:1.32rem;font-weight:600;letter-spacing:-.02em;margin-bottom:6px}
+.mod-head p{font-size:.85rem;color:var(--text-mute);max-width:58ch;line-height:1.6}
+.mod-num{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.14em;color:var(--cyan);margin-bottom:8px;font-weight:600}
+.mod-body{padding:30px}
+@media(max-width:600px){.mod-body{padding:20px}.mod-head{padding:20px}}
+
+.slider-row{margin-top:22px}
+.slider-row label{display:flex;justify-content:space-between;align-items:baseline;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute);margin-bottom:12px;font-weight:600}
+.slider-row label b{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;letter-spacing:-.02em;text-transform:none;color:var(--text);font-weight:600}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;background:rgba(255,255,255,.08);border-radius:100px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--violet));border:3px solid var(--bg);box-shadow:0 0 0 1px rgba(255,77,143,.4),0 4px 16px rgba(255,77,143,.5);cursor:grab;transition:transform .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.1)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--violet));border:3px solid var(--bg);box-shadow:0 0 0 1px rgba(255,77,143,.4),0 4px 16px rgba(255,77,143,.5);cursor:grab}
+.ticks{display:flex;justify-content:space-between;margin-top:10px;font-size:.68rem;color:var(--text-faint);font-weight:500}
+.slider-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+@media(max-width:660px){.slider-grid{grid-template-columns:1fr;gap:20px}}
+
+.chart-wrap{margin:0 -8px;position:relative}
+.chart-wrap svg{width:100%;height:auto;display:block;overflow:visible}
+
+.readout{display:grid;grid-template-columns:170px 1fr;gap:24px;padding:24px 26px;border-radius:var(--radius-lg);background:rgba(255,255,255,.025);border:1px solid var(--border);margin-top:22px;transition:border-color .3s;position:relative}
+@media(max-width:600px){.readout{grid-template-columns:1fr;gap:14px}}
+.readout .big{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;line-height:1;letter-spacing:-.04em}
+.readout .big small{font-size:.9rem;font-weight:400;color:var(--text-mute);margin-left:3px}
+.readout .zone{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;letter-spacing:-.015em}
+.readout .desc{font-size:.88rem;color:var(--text-dim);line-height:1.62}
+
+.stack-readout{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:24px 26px;border-radius:var(--radius-lg);background:rgba(255,255,255,.025);border:1px solid var(--border);margin-top:24px}
+@media(max-width:600px){.stack-readout{grid-template-columns:1fr;gap:16px}}
+.stat .k{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute);font-weight:600;margin-bottom:8px}
+.stat .v{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;letter-spacing:-.035em;line-height:1;transition:color .3s}
+.stat .v small{font-size:.85rem;font-weight:400;color:var(--text-mute);margin-left:3px}
+
+.gap-bar{margin-top:20px;padding:24px 26px;border-radius:var(--radius-lg);background:rgba(255,92,92,.06);border:1px solid rgba(255,92,92,.18);border-left:3px solid var(--red);font-size:.92rem;line-height:1.65;transition:all .35s}
+.gap-bar .head{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;margin-bottom:8px;letter-spacing:-.015em}
+.gap-bar .head .num{font-size:1.4em;font-weight:700}
+.gap-bar .body{color:var(--text-dim)}
+
+.toggles,.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.toggle,.chip{font-family:inherit;font-size:.82rem;font-weight:500;padding:9px 16px;border-radius:100px;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid var(--border-strong);color:var(--text-dim);transition:all .18s}
+.toggle:hover,.chip:hover{border-color:var(--border-hi);color:var(--text);background:rgba(255,255,255,.06)}
+.toggle.on,.chip.on{background:linear-gradient(135deg,rgba(255,77,143,.18),rgba(167,139,250,.14));color:var(--text);border-color:rgba(255,77,143,.45);box-shadow:0 0 20px rgba(255,77,143,.2)}
+.toggle .mult{opacity:.55;margin-left:6px;font-size:.7rem;font-family:ui-monospace,monospace}
+
+.mix-results{display:flex;flex-direction:column;gap:10px}
+.mix-item{padding:18px 22px;border-radius:var(--radius);background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:3px solid var(--green);animation:mixIn .3s ease}
+@keyframes mixIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.mix-item.extreme{border-left-color:var(--red);background:linear-gradient(90deg,rgba(255,92,92,.07),rgba(255,92,92,.02))}
+.mix-item.high{border-left-color:var(--amber);background:linear-gradient(90deg,rgba(255,181,71,.06),rgba(255,181,71,.015))}
+.mix-item.moderate{border-left-color:var(--pink);background:linear-gradient(90deg,rgba(255,77,143,.05),rgba(255,77,143,.01))}
+.mix-item.low{border-left-color:var(--green)}
+.mix-top{display:flex;align-items:center;gap:10px;margin-bottom:7px;flex-wrap:wrap}
+.mix-top .name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;letter-spacing:-.015em}
+.badge{font-family:'Space Grotesk',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px}
+.badge.extreme{background:var(--red);color:#fff}
+.badge.high{background:var(--amber);color:#1A1204}
+.badge.moderate{background:var(--pink);color:#fff}
+.badge.low{background:var(--green);color:#062D12}
+.mix-item p{font-size:.86rem;color:var(--text-dim);line-height:1.62}
+.mix-empty{padding:40px 22px;text-align:center;border:1px dashed var(--border-strong);border-radius:var(--radius);font-size:.88rem;color:var(--text-mute)}
+.mix-verdict{margin-top:16px;padding:20px 24px;border-radius:var(--radius);background:linear-gradient(135deg,rgba(255,77,143,.12),rgba(167,139,250,.08));border:1px solid rgba(255,77,143,.25);font-size:.92rem;line-height:1.65;animation:mixIn .35s ease}
+.mix-verdict strong{color:var(--pink);font-weight:600}
+
+.body-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:22px}
+.check{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:var(--radius);background:rgba(255,255,255,.02);border:1px solid var(--border);cursor:pointer;transition:all .18s;user-select:none}
+.check:hover{border-color:var(--border-strong);background:rgba(255,255,255,.04)}
+.check.on{border-color:rgba(255,77,143,.4);background:linear-gradient(135deg,rgba(255,77,143,.09),rgba(255,77,143,.02))}
+.check .box{flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border-hi);margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .18s;background:rgba(0,0,0,.2)}
+.check.on .box{background:linear-gradient(135deg,var(--pink),var(--violet));border-color:transparent;box-shadow:0 0 12px rgba(255,77,143,.4)}
+.check .box svg{opacity:0;transition:opacity .18s}
+.check.on .box svg{opacity:1}
+.check .txt{font-size:.85rem;line-height:1.5}
+.check .txt b{display:block;font-weight:600;font-size:.9rem;margin-bottom:3px;color:var(--text)}
+.check .txt span{color:var(--text-mute);font-size:.79rem}
+.check.urgent .txt b{color:var(--red)}
+.check.warn .txt b{color:var(--amber)}
+
+.body-verdict{padding:22px 26px;border-radius:var(--radius-lg);background:rgba(255,255,255,.025);border:1px solid var(--border);border-left:3px solid var(--green);font-size:.92rem;line-height:1.65;transition:all .3s}
+.body-verdict .head{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;margin-bottom:8px;letter-spacing:-.02em}
+.body-verdict .body{color:var(--text-dim)}
+.body-verdict.crit{border-left-color:var(--red);background:linear-gradient(90deg,rgba(255,92,92,.08),rgba(255,92,92,.02));border-color:rgba(255,92,92,.25)}
+.body-verdict.crit .head{color:var(--red)}
+.body-verdict.med{border-left-color:var(--pink);background:linear-gradient(90deg,rgba(255,77,143,.07),rgba(255,77,143,.015));border-color:rgba(255,77,143,.22)}
+.body-verdict.med .head{color:var(--pink)}
+.body-verdict.slow{border-left-color:var(--amber);background:linear-gradient(90deg,rgba(255,181,71,.06),rgba(255,181,71,.015));border-color:rgba(255,181,71,.22)}
+.body-verdict.slow .head{color:var(--amber)}
+
+.tl-readout{display:flex;gap:24px;flex-wrap:wrap;padding:20px 24px;background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:var(--radius);margin-top:18px}
+.tl-stat{min-width:110px}
+.tl-stat .k{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute);font-weight:600;margin-bottom:6px}
+.tl-stat .v{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:600;letter-spacing:-.025em}
+.tl-msg{margin-top:16px;padding:16px 20px;border-radius:var(--radius);font-size:.88rem;line-height:1.62;transition:all .3s;border-left:3px solid;color:var(--text-dim)}
+.tl-msg.warn{background:rgba(255,92,92,.07);border-color:var(--red)}
+.tl-msg.warn strong{color:var(--red);font-weight:600}
+.tl-msg.ok{background:rgba(74,222,128,.06);border-color:var(--green)}
+.tl-msg.ok strong{color:var(--green);font-weight:600}
+.tl-msg.calm{background:rgba(255,181,71,.07);border-color:var(--amber)}
+.tl-msg.calm strong{color:var(--amber);font-weight:600}
+
+.seg{display:inline-flex;gap:0;border:1px solid var(--border-strong);border-radius:100px;overflow:hidden;margin-top:6px;background:rgba(255,255,255,.02)}
+.seg button{font-family:'Space Grotesk',sans-serif;font-size:.78rem;font-weight:600;padding:8px 18px;border:none;background:transparent;cursor:pointer;color:var(--text-dim);transition:all .18s}
+.seg button:hover{color:var(--text)}
+.seg button.on{background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff}
+
+.steps{display:flex;flex-direction:column;gap:0}
+.step{border-bottom:1px solid var(--border);cursor:pointer;transition:background .18s}
+.step:last-child{border-bottom:none}
+.step:hover{background:rgba(255,255,255,.015)}
+.step-head{display:flex;align-items:flex-start;gap:16px;padding:20px 24px}
+.step-num{flex:none;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.85rem;color:var(--text-dim);transition:all .22s}
+.step.open .step-num{background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff;border-color:transparent;box-shadow:0 0 20px rgba(255,77,143,.4)}
+.step-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;letter-spacing:-.015em;padding-top:4px;color:var(--text)}
+.step-body{max-height:0;overflow:hidden;transition:max-height .32s ease,padding .32s ease;padding:0 24px 0 74px;color:var(--text-dim);font-size:.88rem;line-height:1.68}
+.step.open .step-body{max-height:460px;padding-bottom:24px}
+.step-body p{margin-bottom:10px}
+.step-body p:last-child{margin-bottom:0}
+.step-body strong{color:var(--pink);font-weight:600}
+@media(max-width:600px){.step-body{padding-left:24px}.step-head{padding:18px}}
+
+.myth{background:linear-gradient(135deg,rgba(255,77,143,.06),rgba(167,139,250,.04));border:1px solid rgba(255,77,143,.18);border-radius:var(--radius-xl);padding:32px;margin-top:30px}
+.myth h3{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:600;margin-bottom:18px;color:var(--pink);letter-spacing:-.015em}
+.myth-row{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);font-size:.88rem;line-height:1.65}
+.myth-row:last-child{border-bottom:none}
+.myth-row .x{color:var(--red);font-weight:700;flex:none;font-family:'Space Grotesk',sans-serif;font-size:1.1rem}
+.myth-row .tick{color:var(--green);font-weight:700;flex:none;font-family:'Space Grotesk',sans-serif;font-size:1.1rem}
+.myth-row .txt{color:var(--text-dim)}
+.myth-row .txt b{color:var(--text);font-weight:600}
+
+.note{font-size:.82rem;color:var(--text-mute);line-height:1.65;margin-top:22px;padding:16px 20px;background:rgba(255,181,71,.05);border-left:3px solid var(--amber);border-radius:0 var(--radius-sm) var(--radius-sm) 0}
+.note strong{color:var(--text);font-weight:600}
+
+.callout-stat{background:linear-gradient(135deg,rgba(255,77,143,.08),rgba(167,139,250,.06));border:1px solid rgba(255,77,143,.2);border-radius:var(--radius-lg);padding:32px 36px;position:relative;overflow:hidden}
+.callout-stat .k{font-family:'Space Grotesk',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--pink);margin-bottom:10px;font-weight:600;position:relative}
+.callout-stat .v{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:700;letter-spacing:-.035em;line-height:1;margin-bottom:10px;position:relative}
+.callout-stat .desc{font-size:.92rem;color:var(--text-dim);line-height:1.6;max-width:52ch;position:relative}
+
+.pullquote{margin:36px 0;padding:26px 32px 24px;background:linear-gradient(135deg,rgba(255,77,143,.06),rgba(62,232,216,.03));border-radius:var(--radius-lg);border-left:3px solid var(--pink);position:relative}
+.pullquote::before{content:"“";position:absolute;top:-8px;left:18px;font-family:'Space Grotesk',sans-serif;font-size:3.4rem;line-height:1;color:var(--pink);opacity:.35}
+.pullquote p{font-family:'Space Grotesk',sans-serif;font-size:1.08rem;font-weight:500;line-height:1.5;letter-spacing:-.01em;color:var(--text);margin-bottom:14px;position:relative}
+.pullquote cite{display:block;font-style:normal;font-size:.76rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--cyan);opacity:.85}
+
+.prose{max-width:70ch}
+.prose p{margin-bottom:16px;font-size:.95rem;line-height:1.78;color:var(--text-dim)}
+.prose h3{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;margin:34px 0 14px;letter-spacing:-.02em;color:var(--text)}
+.prose h4{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;margin:24px 0 10px;color:var(--text)}
+.prose ul,.prose ol{margin:12px 0 22px;padding-left:22px}
+.prose li{margin:8px 0;font-size:.94rem;line-height:1.72;color:var(--text-dim)}
+.prose strong{color:var(--text);font-weight:600}
+.prose code{background:rgba(255,255,255,.06);padding:2px 7px;border-radius:4px;font-size:.86em;font-family:ui-monospace,monospace;color:var(--cyan)}
+
+h3.subhead{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:600;letter-spacing:-.02em;margin:40px 0 16px;color:var(--text)}
+
+.res-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.res{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.006));border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transition:all .25s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.res:hover{transform:translateY(-4px);border-color:rgba(255,77,143,.28);box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 40px rgba(255,77,143,.1)}
+.res h4{font-family:'Space Grotesk',sans-serif;font-size:1.02rem;font-weight:600;margin-bottom:8px;letter-spacing:-.015em}
+.res p{font-size:.85rem;color:var(--text-dim);line-height:1.62;margin-bottom:12px}
+.res .link{font-size:.83rem;font-weight:600;color:var(--cyan);text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:color .18s}
+.res .link:hover{color:var(--pink)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:'Space Grotesk',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:var(--pink-soft);color:var(--pink);border:1px solid rgba(255,77,143,.25);margin-bottom:12px;margin-right:4px}
+.pill.clin{background:rgba(167,139,250,.13);color:var(--violet);border-color:rgba(167,139,250,.28)}
+.pill.crisis{background:rgba(255,92,92,.12);color:var(--red);border-color:rgba(255,92,92,.28)}
+.pill.harm{background:rgba(62,232,216,.12);color:var(--cyan);border-color:rgba(62,232,216,.28)}
+
+.filters{display:flex;flex-direction:column;gap:16px;margin-bottom:30px;padding:24px 26px;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.008));border:1px solid var(--border);border-radius:var(--radius-lg)}
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.filter-row .lbl{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-mute);font-weight:600;margin-right:6px;min-width:92px}
+.fbtn{font-family:inherit;font-size:.79rem;font-weight:500;padding:8px 15px;border-radius:100px;cursor:pointer;background:rgba(255,255,255,.03);border:1px solid var(--border-strong);color:var(--text-dim);transition:all .18s}
+.fbtn:hover{border-color:var(--border-hi);color:var(--text)}
+.fbtn.on{background:linear-gradient(135deg,rgba(255,77,143,.2),rgba(167,139,250,.14));color:var(--text);border-color:rgba(255,77,143,.4);box-shadow:0 0 16px rgba(255,77,143,.18)}
+.count{font-size:.8rem;color:var(--text-mute);margin-bottom:20px;font-family:'Space Grotesk',sans-serif}
+
+.stories{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.story{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.006));border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;transition:all .25s;display:flex;flex-direction:column;text-decoration:none;color:inherit}
+.story:hover{transform:translateY(-4px);border-color:rgba(255,77,143,.28);box-shadow:0 16px 40px rgba(0,0,0,.3),0 0 40px rgba(255,77,143,.1)}
+.story.hidden{display:none}
+.story-img{height:140px;position:relative;overflow:hidden;background:var(--bg-elevated)}
+.story-img.a{background:linear-gradient(135deg,#FF4D8F,#A78BFA)}
+.story-img.b{background:linear-gradient(135deg,#3EE8D8,#4ADE80)}
+.story-img.c{background:linear-gradient(135deg,#FFB547,#FF4D8F)}
+.story-img.d{background:linear-gradient(135deg,#A78BFA,#3EE8D8)}
+.story-img.e{background:linear-gradient(135deg,#FF4D8F,#FF5C5C)}
+.story-img.f{background:linear-gradient(135deg,#4ADE80,#3EE8D8)}
+.story-img .region{position:absolute;bottom:14px;left:18px;font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;opacity:.95;z-index:2;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.story-img .format{position:absolute;top:14px;right:14px;font-family:'Space Grotesk',sans-serif;font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:rgba(0,0,0,.5);color:#fff;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.2);z-index:2}
+.story-body{padding:24px 22px;flex:1;display:flex;flex-direction:column}
+.story-body .title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:600;margin-bottom:12px;letter-spacing:-.015em;line-height:1.3}
+.story-body .quote{font-size:.9rem;line-height:1.6;color:var(--text-dim);margin-bottom:18px;flex:1;font-style:italic;padding-left:14px;border-left:2px solid var(--border-strong)}
+.story-body .cite{font-size:.76rem;color:var(--text-mute);margin-bottom:14px}
+.story-body .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-family:'Space Grotesk',sans-serif;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;background:rgba(255,255,255,.05);color:var(--text-dim);border:1px solid var(--border)}
+.tag.pink{background:var(--pink-soft);color:var(--pink);border-color:rgba(255,77,143,.25)}
+.tag.cyan{background:rgba(62,232,216,.1);color:var(--cyan);border-color:rgba(62,232,216,.25)}
+.tag.violet{background:rgba(167,139,250,.1);color:var(--violet);border-color:rgba(167,139,250,.25)}
+
+.featured-story{background:linear-gradient(135deg,rgba(255,77,143,.06),rgba(167,139,250,.04));border:1px solid rgba(255,77,143,.2);border-radius:var(--radius-xl);padding:52px 56px;margin-top:34px;position:relative;overflow:hidden}
+@media(max-width:760px){.featured-story{padding:36px 26px}}
+.featured-story .kicker{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;font-weight:600}
+.featured-story h3{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.4rem,2.8vw,1.9rem);font-weight:600;letter-spacing:-.025em;line-height:1.2;margin-bottom:20px;max-width:24ch}
+.featured-story .cnote-card{background:rgba(255,255,255,.04);border:1px dashed var(--border-strong);border-radius:var(--radius-sm);padding:12px 16px;font-size:.76rem;line-height:1.55;color:var(--text-mute);margin-bottom:22px}
+.featured-story .cnote-card strong{color:var(--amber);font-weight:600}
+.featured-story .lede{font-family:'Space Grotesk',sans-serif;font-size:1.08rem;font-weight:500;line-height:1.55;letter-spacing:-.01em;color:var(--text);margin-bottom:26px;max-width:62ch;padding-left:18px;border-left:3px solid var(--pink)}
+.featured-story .body{font-size:.96rem;line-height:1.85;max-width:62ch;color:var(--text-dim)}
+.featured-story .body p{margin-bottom:18px}
+.featured-story .body strong{color:var(--text);font-weight:600}
+.featured-story .foot{margin-top:30px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+.featured-story .foot .who{font-size:.82rem;color:var(--text-mute)}
+.featured-story .foot .who b{color:var(--text);font-weight:600}
+
+.cta-band{background:linear-gradient(135deg,rgba(255,77,143,.14),rgba(167,139,250,.1));border:1px solid rgba(255,77,143,.25);border-radius:var(--radius-xl);padding:48px 52px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;margin-top:40px;position:relative;overflow:hidden}
+.cta-band h3{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:600;letter-spacing:-.025em;margin-bottom:10px;line-height:1.2}
+.cta-band p{font-size:.92rem;color:var(--text-dim);max-width:52ch;line-height:1.7}
+@media(max-width:700px){.cta-band{padding:32px 24px}}
+
+.crisis{position:fixed;bottom:0;left:0;right:0;z-index:90;background:linear-gradient(180deg,rgba(11,13,23,.75),rgba(11,13,23,.95));backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-top:1px solid var(--border);color:var(--text);display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;padding:11px 22px;font-size:.8rem}
+.crisis .lbl{font-family:'Space Grotesk',sans-serif;font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.66rem;color:var(--text-mute);display:flex;align-items:center;gap:8px}
+.crisis .lbl::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red);animation:pulse-dot 1.6s infinite}
+.crisis a{color:var(--text);text-decoration:none;font-weight:500;display:flex;align-items:center;gap:7px;transition:color .18s;white-space:nowrap;padding:4px 10px;border-radius:100px;border:1px solid transparent}
+.crisis a:hover{color:var(--pink);background:rgba(255,77,143,.08);border-color:rgba(255,77,143,.2)}
+@media(max-width:640px){.crisis{gap:8px;font-size:.72rem;padding:9px 12px}.crisis .lbl{display:none}}
+
+footer{background:var(--bg-raised);border-top:1px solid var(--border);padding:56px 0 34px;margin-top:20px;position:relative;z-index:1}
+.foot{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap;align-items:flex-start}
+.foot .brand{color:var(--text);margin-bottom:14px}
+.foot p{font-size:.82rem;color:var(--text-mute);max-width:46ch;line-height:1.7}
+.foot-links{display:flex;gap:16px;font-size:.82rem;flex-wrap:wrap;max-width:560px}
+.foot-links a{color:var(--text-mute);text-decoration:none;cursor:pointer;transition:color .18s}
+.foot-links a:hover{color:var(--pink)}
+.ack{margin-top:34px;padding-top:24px;border-top:1px solid var(--border);font-size:.75rem;color:var(--text-faint);line-height:1.7}
+
+.page{display:none}
+.page.active{display:block;animation:pageIn .32s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+.form-group{margin-bottom:22px}
+.form-group label{display:block;font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-mute);margin-bottom:9px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:13px 15px;font-family:inherit;font-size:.92rem;background:rgba(255,255,255,.03);border:1px solid var(--border-strong);border-radius:var(--radius);color:var(--text);transition:all .18s}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--text-faint)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--pink);background:rgba(255,77,143,.04);box-shadow:0 0 0 3px rgba(255,77,143,.12)}
+.form-group textarea{min-height:180px;resize:vertical;line-height:1.6}
+.form-group select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(237,239,247,.5)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.form-group select option{background:var(--bg-card);color:var(--text)}
+.checkbox-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:.86rem;line-height:1.55;padding:12px 14px;background:rgba(255,255,255,.02);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.checkbox-row input{width:auto;margin-top:3px;flex:none;accent-color:var(--pink);transform:scale(1.15)}
+.checkbox-row label{text-transform:none;letter-spacing:0;font-size:.86rem;font-weight:400;color:var(--text-dim);margin:0;font-family:'Inter',sans-serif;cursor:pointer}
+
+.insights{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:22px}
+.insight{background:rgba(255,255,255,.025);border:1px solid var(--border);border-radius:var(--radius);padding:22px 22px}
+.insight .tag-label{font-family:'Space Grotesk',sans-serif;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;font-weight:600}
+.insight .val{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;letter-spacing:-.03em;line-height:1;margin-bottom:10px}
+.insight p{font-size:.82rem;color:var(--text-mute);line-height:1.6}
+
+.barrier-list{display:flex;flex-direction:column;gap:14px}
+.barrier{display:flex;gap:22px;align-items:flex-start;background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.006));border:1px solid var(--border);border-radius:var(--radius-lg);padding:26px 28px;transition:all .22s}
+.barrier:hover{border-color:var(--border-strong);transform:translateX(4px)}
+.barrier-num{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.03em;color:var(--pink);opacity:.5;line-height:1;flex:none;padding-top:2px;min-width:44px}
+.barrier-body h4{font-family:'Space Grotesk',sans-serif;font-size:1.08rem;font-weight:600;letter-spacing:-.015em;margin-bottom:9px;color:var(--text)}
+.barrier-body p{font-size:.9rem;color:var(--text-dim);line-height:1.7;margin:0}
+.barrier-body em{font-style:italic;color:var(--cyan);opacity:.9}
+.barrier-body strong{font-weight:600;color:var(--text)}
+@media(max-width:600px){.barrier{flex-direction:column;gap:12px;padding:22px}.barrier-num{font-size:1.2rem}}
+
+.evidence-table{width:100%;border-collapse:separate;border-spacing:0;margin:20px 0;font-size:.9rem;background:rgba(255,255,255,.02);border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.evidence-table th{background:linear-gradient(135deg,rgba(255,77,143,.14),rgba(167,139,250,.1));color:var(--text);text-align:left;padding:14px 20px;font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--border-strong)}
+.evidence-table td{padding:14px 20px;border-bottom:1px solid var(--border);color:var(--text-dim)}
+.evidence-table tr:last-child td{border-bottom:none}
+.evidence-table td.reduction{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;color:var(--green);white-space:nowrap}
+.evidence-table td.reduction.strong{color:var(--pink);font-size:1.08rem;text-shadow:0 0 20px rgba(255,77,143,.4)}
+
+details{border-bottom:1px solid var(--border);padding:16px 4px}
+details summary{cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:.98rem;letter-spacing:-.01em;color:var(--text);list-style:none;display:flex;justify-content:space-between;align-items:center}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";font-size:1.25rem;color:var(--pink);font-weight:400;transition:transform .2s;margin-left:16px}
+details[open] summary::after{transform:rotate(45deg)}
+details .detail-body{padding-top:12px;font-size:.88rem;color:var(--text-dim);line-height:1.72}
+
+.to-top{position:fixed;bottom:78px;right:20px;z-index:85;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--violet));color:#fff;border:none;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(255,77,143,.4);font-size:1.05rem;transition:all .22s}
+.to-top.show{display:flex}
+.to-top:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(255,77,143,.5)}
+</style>
+</head>
+<body>
+
+<div class="cnote" id="cnote">
+  <strong>Content note:</strong> this site discusses drug use, sex, overdose and mental health. Take care of yourself — you can leave at any time.
+  <button class="close" onclick="document.getElementById('cnote').classList.add('hidden')" aria-label="Close">✕</button>
+</div>
+
+<header>
+  <div class="wrap hdr">
+    <a href="#/home" class="brand" onclick="closeMobileNav()">
+      <span class="mark"></span>
+      <span>Night <span class="thin">Routes</span></span>
+    </a>
+    <nav id="mainNav">
+      <a href="#/home" data-page="home">Home</a>
+      <a href="#/why" data-page="why">Why This Exists</a>
+      <a href="#/g" data-page="g">Know Your G</a>
+      <a href="#/tik" data-page="tik">Know Your Tik</a>
+      <a href="#/stack" data-page="stack">Stack</a>
+      <a href="#/mix" data-page="mix">Mix</a>
+      <a href="#/stories" data-page="stories">Stories</a>
+      <a href="#/routes" data-page="routes">Routes</a>
+      <a href="#/contribute" data-page="contribute">Contribute</a>
+    </nav>
+    <button class="menu-btn" onclick="toggleMobileNav()" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <a href="#/home" onclick="closeMobileNav()">Home</a>
+  <a href="#/why" onclick="closeMobileNav()">Why This Exists</a>
+  <a href="#/g" onclick="closeMobileNav()">Know Your G</a>
+  <a href="#/tik" onclick="closeMobileNav()">Know Your Tik</a>
+  <a href="#/stack" onclick="closeMobileNav()">The Stack</a>
+  <a href="#/mix" onclick="closeMobileNav()">The Mix</a>
+  <a href="#/stories" onclick="closeMobileNav()">Stories</a>
+  <a href="#/routes" onclick="closeMobileNav()">SA Routes</a>
+  <a href="#/contribute" onclick="closeMobileNav()">Contribute</a>
+  <a href="#/about" onclick="closeMobileNav()">About</a>
+  <a href="#/rights" onclick="closeMobileNav()">Your Rights</a>
+  <a href="#/testing" onclick="closeMobileNav()">Testing</a>
+  <a href="#/firstnations" onclick="closeMobileNav()">First Nations</a>
+  <a href="#/townships" onclick="closeMobileNav()">Townships</a>
+  <a href="#/slamming" onclick="closeMobileNav()">Slamming</a>
+  <a href="#/naloxone" onclick="closeMobileNav()">Naloxone</a>
+  <a href="#/glossary" onclick="closeMobileNav()">Glossary</a>
+  <a href="#/privacy" onclick="closeMobileNav()">Privacy</a>
+  <a href="#/contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<main id="main">
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="wrap">
+      <span class="eyebrow">South Africa · Peer-led · Night Routes</span>
+      <h1>Every story<br>is a <em>map.</em></h1>
+      <p class="lede">Night Routes is a peer-led archive and navigation service for gay, bi, queer and other MSM and transgender women in South Africa navigating chemsex. Read someone's route. Find your own. No judgement, no abstinence required.</p>
+      <div class="actions">
+        <a href="#/routes" class="btn solid">Find support →</a>
+        <a href="#/stories" class="btn line">Read stories</a>
+      </div>
+      <div class="meta"><span>Peer-led</span><span>Non-judgemental</span><span>Local to South Africa</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">The Listening Room</p>
+      <h2 class="sec-title">Voices from the community.</h2>
+      <p class="sec-sub">Three excerpts from peers across South Africa — using, moderating, pausing, stopping. Every story is shared with consent.</p>
+      <div class="grid-3">
+        <a href="#/stories" class="story">
+          <div class="story-img a"><span class="format">Written</span><span class="region">Joburg · 34</span></div>
+          <div class="story-body">
+            <div class="quote">"I didn't realise how much shame I was carrying until I sat with someone who didn't flinch."</div>
+            <div class="cite">On the first time asking for help</div>
+            <div class="meta"><span class="tag pink">Using</span><span class="tag">Written</span></div>
+          </div>
+        </a>
+        <a href="#/stories" class="story">
+          <div class="story-img b"><span class="format">Audio</span><span class="region">Cape Town · 41</span></div>
+          <div class="story-body">
+            <div class="quote">"I've learned more about safer using from my friends than from any pamphlet. But a service that actually gets it? That changed everything."</div>
+            <div class="cite">On peer knowledge and clinical care</div>
+            <div class="meta"><span class="tag cyan">Moderating</span><span class="tag">Audio</span></div>
+          </div>
+        </a>
+        <a href="#/stories" class="story">
+          <div class="story-img c"><span class="format">Written</span><span class="region">Soweto · 29</span></div>
+          <div class="story-body">
+            <div class="quote">"The crash was the part nobody warned me about. The high I understood. The two days after, I had no idea."</div>
+            <div class="cite">On comedown care</div>
+            <div class="meta"><span class="tag violet">Pausing</span><span class="tag">Written</span></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">How this works</p>
+      <h2 class="sec-title">Recognise. Choose. Connect.</h2>
+      <p class="sec-sub">Nothing here is a test you can fail. The site is built in the order most people actually need it.</p>
+      <div class="grid-3">
+        <div class="tcard"><div class="n">01 · RECOGNISE</div><h3>See yourself first</h3><p>Read stories from people in the same position. Nobody leads with risk or mortality statistics. You start by seeing yourself, not by being assessed.</p></div>
+        <div class="tcard"><div class="n">02 · CHOOSE</div><h3>Decide what you want</h3><p>Safer use, moderation, a pause, or stopping. Every tool on this site works for all four. No option is treated as the "real" one.</p></div>
+        <div class="tcard"><div class="n">03 · CONNECT</div><h3>Find the right door</h3><p>South African services that get the specifics. Peer-led first, clinical when you want it. Free, confidential, no lectures.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">Why we built this</p>
+      <h2 class="sec-title">The evidence. The gap. What's missing.</h2>
+      <p class="sec-sub">South Africa has its first national harm reduction guideline for chemsex. This page explains why a peer-led resource like this one is still needed.</p>
+      <a href="#/why" class="res" style="max-width:720px">
+        <span class="pill">Read</span>
+        <h4>Why This Resource Is Needed →</h4>
+        <p>The scale of chemsex in South Africa, the health impacts, the barriers to care, the policy gap, and the evidence on what peer-led services achieve.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">The tools</p>
+      <h2 class="sec-title">Interactive, not instructive.</h2>
+      <p class="sec-sub">Four tools that show you the shape of the risk instead of telling you what to do.</p>
+      <div class="grid-2">
+        <a href="#/g" class="res"><span class="pill">Tool</span><h4>Know Your G</h4><p>The dose–response curve, the 20-minute redose window, the mix that stops breathing.</p><span class="link">Open tool →</span></a>
+        <a href="#/tik" class="res"><span class="pill">Tool</span><h4>Know Your Tik</h4><p>72-hour session view, cumulative load, comedown care.</p><span class="link">Open tool →</span></a>
+        <a href="#/stack" class="res"><span class="pill">Tool</span><h4>The Stack</h4><p>The gap between how you feel and how loaded you actually are.</p><span class="link">Open tool →</span></a>
+        <a href="#/mix" class="res"><span class="pill">Tool</span><h4>The Mix</h4><p>Tap everything in the room. See what stacks, what masks, and what stops breathing.</p><span class="link">Open tool →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">Where to start</p>
+      <h2 class="sec-title">Three doors that are open now.</h2>
+      <p class="sec-sub">If you only look at one thing on this site, look at the directory.</p>
+      <div class="grid-3">
+        <a href="#/routes" class="res"><span class="pill">Peer-led</span><h4>OUT LGBT Well-being</h4><p>Chemsex harm reduction chatbot on WhatsApp, HARMless Project, peer support. Founded 1994.</p><span class="link">WhatsApp: 087 250 2762 →</span></a>
+        <a href="#/routes" class="res"><span class="pill clin">Clinical</span><h4>Triangle Project</h4><p>Needle and syringe programme, harm reduction counselling, opioid substitution therapy, sexual health care, helpline. Cape Town.</p><span class="link">(021) 712 6699 →</span></a>
+        <a href="#/routes" class="res"><span class="pill harm">Peer-led</span><h4>SANPUD</h4><p>South African Network of People Who Use Drugs. Peer-led advocacy, naloxone distribution, overdose response training.</p><span class="link">sanpud.org →</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="cta-band">
+        <div><h3>Your story is a map for someone else.</h3><p>If you've lived it, you know something a textbook can't teach. Contribute a story — anonymously or credited, written, audio or video. Contributors are paid.</p></div>
+        <a href="#/contribute" class="btn solid">Contribute →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- WHY THIS EXISTS -->
+<div class="page" id="page-why">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Why This Exists</span></div>
+      <span class="eyebrow">Why this exists</span>
+      <h1>Chemsex is everywhere. The support <em>isn't.</em></h1>
+      <p class="lede">South Africa released its first national harm reduction guidelines for chemsex in 2025. That was a landmark moment. But guidelines on paper don't reach people in a Soweto chemsex house at 2am.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap wrap-narrow">
+      <p class="sec-label">What we know</p>
+      <h2 class="sec-title">The data is thin. The signals are not.</h2>
+      <p class="sec-sub">South Africa has not yet fully quantified chemsex. That absence of data is itself part of the problem.</p>
+      <div class="prose">
+        <p>Available evidence paints a picture that is consistent across every study. Chemsex in South Africa is concentrated among urban MSM communities, including townships, with higher usage in Cape Town and Johannesburg. A seven-city survey found that <strong>11% of MSM in Cape Town and 4% of MSM in Johannesburg recently used crystal meth.</strong></p>
+        <p>In broader surveys of gay, bisexual and other men who have sex with men (GBMSM), <strong>chemsex practices have been reported in up to a third of respondents.</strong> Data from low- and middle-income countries suggest past-year chemsex prevalence ranges from <strong>5.0% to 28.4%.</strong></p>
+        <p>Among men who engage in chemsex in South African samples, <strong>methamphetamine is the most widely used substance</strong>, often introduced through social networks.</p>
+      </div>
+      <div class="pullquote"><p>Chemsex is not always problematic, but some people may develop health and/or social issues with this practice.</p><cite>South African harm reduction guideline for chemsex, 2025</cite></div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">The local context</p>
+      <h2 class="sec-title">Chemsex in South Africa doesn't look like chemsex in London or Melbourne.</h2>
+      <p class="sec-sub">Most international harm reduction resources assume a middle-class, online, private-venue model. South Africa has that too. But it also has something else entirely.</p>
+      <div class="wrap-narrow" style="padding:0"><div class="prose">
+        <p>In the Global North, chemsex is often organised around online hookup sites frequented by middle-class MSM. In South Africa, <strong>township chemsex houses</strong> operate differently. In Soweto alone, OUT LGBT Well-being has worked with <strong>17 houses where groups of MSM informally live, and where sexualised drug use is available to MSM from the broader community.</strong></p>
+        <p>Between January 2024 and March 2025, <strong>1,662 township-based chemsex clients received services</strong> from OUT's Engage Men's Health programme. The majority are young, aged 20–34. The profile of men in these houses is stark: <strong>62% had not completed secondary education, and only 9% were employed.</strong></p>
+      </div></div>
+      <h3 class="subhead">What actually happens in a Soweto chemsex house</h3>
+      <div class="grid-3" style="margin-top:22px">
+        <div class="statcard"><div class="v">77%</div><div class="k">Used methamphetamine (tik), most commonly introduced through social networks.</div></div>
+        <div class="statcard"><div class="v">40%</div><div class="k">Combined methamphetamine with other substances during sessions.</div></div>
+        <div class="statcard urgent"><div class="v">15%</div><div class="k">Had injected drugs — the highest-risk route for blood-borne virus transmission.</div></div>
+      </div>
+      <div class="callout-stat" style="margin-top:22px">
+        <div class="k">FREQUENCY</div><div class="v">Nearly 6 in 10</div>
+        <div class="desc">men in township chemsex houses attended more than once a week.</div>
+      </div>
+      <div class="pullquote" style="margin-top:34px"><p>Opposed to the Global North, where chemsex is organised around online hookup sites frequented by middle class MSM, EMH Chemsex clients are predominantly unemployed, black and poor.</p><cite>OUT LGBT Well-being, HR23 presentation</cite></div>
+      <h3 class="subhead">The dual reality</h3>
+      <div class="grid-2">
+        <div class="tcard"><div class="n">URBAN MIDDLE-CLASS</div><h3>Online networks</h3><p>Private parties, sex-on-site venues. Accessed via Grindr and similar apps. Often invisible to public health services.</p></div>
+        <div class="tcard"><div class="n">TOWNSHIP CHEMSEX HOUSES</div><h3>Offline, shared spaces</h3><p>Substances exchanged for sex, money, or both, for extended periods of days or weeks. Often connected to taverns.</p></div>
+      </div>
+      <p style="text-align:center;margin-top:24px;color:var(--text-mute);font-style:italic;font-size:.92rem">Both need harm reduction. A single model won't reach either.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">What it does to people</p>
+      <h2 class="sec-title">HIV, psychosis, suicide, violence. None of this is hypothetical.</h2>
+      <p class="sec-sub">The health consequences of chemsex in South Africa are not theoretical risks. They are documented and measured.</p>
+      <div class="wrap-narrow" style="padding:0"><div class="prose">
+        <h4>HIV and STI risk</h4>
+        <p>HIV prevalence among MSM engaged in chemsex is high — <strong>up to nearly 40% in some samples</strong> — and care retention is poor. In township chemsex houses specifically, <strong>HIV prevalence is around 20%</strong>, and retention on ART is only <strong>45%</strong> for chemsex clients, compared to <strong>70%</strong> for MSM in the programme overall.</p>
+      </div></div>
+      <h3 class="subhead">Mental health in the Soweto chemsex cohort</h3>
+      <div class="grid-4">
+        <div class="statcard"><div class="v">50%</div><div class="k">Symptoms of anxiety or depression</div></div>
+        <div class="statcard urgent"><div class="v">54%</div><div class="k">Showed signs of psychosis</div></div>
+        <div class="statcard urgent"><div class="v">28%</div><div class="k">Experienced suicidal ideation</div></div>
+        <div class="statcard"><div class="v">33%</div><div class="k">Internalised homophobia</div></div>
+      </div>
+      <div class="wrap-narrow" style="padding:0;margin-top:26px"><div class="prose">
+        <h4>Violence and trauma</h4>
+        <p>Widespread experience of sexual and physical violence is reported in some studies, driven in part by the impact of stigma and strained relationships.</p>
+        <h4>Long-term consequences</h4>
+        <p>Long-term engagement is associated with increased HIV and STI risk, declining mental health, loss of social connections, relationship instability, and financial insecurity.</p>
+      </div></div>
+      <div class="pullquote"><p>Mental health challenges were universally reported, particularly after chemsex sessions.</p><cite>Values and preferences research, South Africa</cite></div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap wrap-narrow">
+      <p class="sec-label">The barriers</p>
+      <h2 class="sec-title">Criminalisation. Stigma. And a service system that wasn't built for this.</h2>
+      <p class="sec-sub">Every barrier on this page is a reason someone doesn't call, doesn't disclose, doesn't come back.</p>
+      <div class="barrier-list">
+        <div class="barrier"><div class="barrier-num">01</div><div class="barrier-body"><h4>Criminalisation</h4><p>Drug possession for personal use is a criminal offence in South Africa. There is <strong>no Good Samaritan law</strong>. This means calling for help during an overdose carries legal risk. Criminalisation is not just a policy position — it is a direct barrier to emergency care.</p></div></div>
+        <div class="barrier"><div class="barrier-num">02</div><div class="barrier-body"><h4>Stigma</h4><p>Chemsex sits at the intersection of multiple stigmas: drug use, homosexuality, sex work, and HIV. David Nel, Executive Director of OUT LGBT Well-being, puts it plainly: <em>"All of this happens in a society where drug use is criminalised. There are thus multiple levels of stigma which we need to break."</em></p></div></div>
+        <div class="barrier"><div class="barrier-num">03</div><div class="barrier-body"><h4>Lack of knowledge and services</h4><p>The national guideline states the problem directly: <em>"Locally, there is a lack of knowledge, services, and support for people who engage in chemsex. This exacerbates their risk of exposure to HIV and other STIs, heightens barriers to accessing comprehensive care, and intensifies potential harms."</em></p></div></div>
+        <div class="barrier"><div class="barrier-num">04</div><div class="barrier-body"><h4>Healthcare discrimination</h4><p>LGBTQ+ people in South Africa face persistent institutional stigma when accessing healthcare — misgendering, invasive questioning, discrimination, and inadequate staff training all contribute to <strong>delayed healthcare-seeking behaviour and interrupted continuity of care.</strong></p></div></div>
+        <div class="barrier"><div class="barrier-num">05</div><div class="barrier-body"><h4>Care retention failure</h4><p>Between April and September 2022, 153 chemsex clients tested HIV-positive in the EMH programme, and 139 were initiated on ART. By September 2022, despite ART home delivery, <strong>only 75 clients were retained in care — 45% retention.</strong></p></div></div>
+      </div>
+      <div class="pullquote"><p>Neither existing HIV services nor drug treatment services were built with sexualised drug use in mind. As a result, chemsex users often have a very high vulnerability to HIV and STIs, but also to mental ill-health and socio-economic difficulty.</p><cite>AIDS 2026 conference report</cite></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">The policy gap</p>
+      <h2 class="sec-title">Guidelines are necessary. They are not sufficient.</h2>
+      <p class="sec-sub">South Africa's first chemsex harm reduction guideline is a landmark. It is also a document written for clinicians, not for the men it's meant to help.</p>
+      <div class="wrap-narrow" style="padding:0"><div class="prose">
+        <p>The South African harm reduction guideline for chemsex was published in the <em>Southern African Journal of HIV Medicine</em> in 2025. It recommends that services should:</p>
+        <ul>
+          <li>Be sensitive to sexual orientation, gender identity and expression, as well as substance use and sex work</li>
+          <li>Employ a <strong>sex-positive approach</strong></li>
+          <li>Provide <strong>judgement-free services</strong></li>
+          <li>Enable accessible prevention, testing, treatment, harm reduction, and care</li>
+          <li>Promote PrEP, PEP and ART</li>
+          <li>Offer assessment, counselling, management, and referral for substance use and mental health needs</li>
+          <li>Facilitate access to emergency care for overdose, intimate partner violence, and sexual assault</li>
+        </ul>
+      </div></div>
+      <div class="callout-stat" style="margin-top:30px">
+        <div class="k">THE GAP</div><div class="v">A missing layer</div>
+        <div class="desc">This is the right framework. But it is aimed at clinicians. What's missing is the layer between the guideline and the person. A clinician can't reach a 23-year-old man in a Soweto chemsex house who has never disclosed his drug use to anyone. A WhatsApp chatbot can. A story from someone who's been there can. That layer is what Night Routes is for.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap wrap-narrow">
+      <p class="sec-label">What works</p>
+      <h2 class="sec-title">The evidence on peer-led chemsex services is strong.</h2>
+      <p class="sec-sub">This isn't aspirational. It's measurable.</p>
+      <div class="prose">
+        <p>OUT LGBT Well-being ran a pilot chemsex programme for MSM in Soweto between January 2024 and March 2025, funded by the Elton John AIDS Foundation. The intervention combined individualised care plans, psychological support, group cognitive behavioural therapy, and individual accompaniment.</p>
+      </div>
+      <table class="evidence-table">
+        <thead><tr><th>Indicator</th><th>Reduction</th></tr></thead>
+        <tbody>
+          <tr><td>Anxiety symptoms</td><td class="reduction">↓ 31–35%</td></tr>
+          <tr><td>Depression symptoms</td><td class="reduction">↓ 31–35%</td></tr>
+          <tr><td>Suicidal ideation</td><td class="reduction">↓ 31–35%</td></tr>
+          <tr><td>Psychosis symptoms</td><td class="reduction strong">↓ 63%</td></tr>
+          <tr><td>Problematic drug use</td><td class="reduction">↓ significant</td></tr>
+        </tbody>
+      </table>
+      <div class="prose" style="margin-top:24px"><p>HIV retention improved: the programme achieved a <strong>40% increase in ART retention</strong> among participants by working directly with chemsex houses.</p></div>
+      <div class="pullquote"><p>Our experience showed that it was possible to run a peer-led service for gay men that brings those services as near as possible to clients.</p><cite>David Nel · Executive Director · OUT LGBT Well-being</cite></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">The gap this fills</p>
+      <h2 class="sec-title">A bridge, not a replacement.</h2>
+      <p class="sec-sub">Night Routes does not replace clinical care, peer support, or crisis services. It sits between them and the person who hasn't picked up the phone yet.</p>
+      <div class="grid-3">
+        <div class="tcard"><div class="n">01</div><h3>Reach people before they reach a clinic</h3><p>Stories from peers who have been there. No clinical assessment. No intake form. Just recognition.</p></div>
+        <div class="tcard"><div class="n">02</div><h3>Make harm reduction practical</h3><p>Interactive tools that show the shape of the risk rather than telling people what to do.</p></div>
+        <div class="tcard"><div class="n">03</div><h3>Connect to real, verified services</h3><p>A directory of South African services reviewed quarterly, with peer-led options first.</p></div>
+        <div class="tcard"><div class="n">04</div><h3>Hold space for the SA context</h3><p>Townships. Chemsex houses. Whoonga. Tik. No Good Samaritan law. PrEP at 98% of public clinics.</p></div>
+        <div class="tcard"><div class="n">05</div><h3>Pay for lived experience</h3><p>Every story is credited where the contributor chooses, and every contributor is paid. Peer knowledge is expertise.</p></div>
+      </div>
+      <div class="pullquote"><p>Participants emphasised the need for accessible mental health support and services that focus on drug use and sexual practices that emphasise harm reduction over abstinence.</p><cite>Values and preferences research, Johannesburg and Cape Town</cite></div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <div class="cta-band">
+        <div><h3>If you're reading this and recognising yourself.</h3><p>You don't have to do anything about it today. But the South African services listed here get this specific pattern, and they won't lecture you.</p></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap"><a href="#/routes" class="btn solid">Find support →</a><a href="#/stories" class="btn line">Read stories</a></div>
+      </div>
+      <p class="note" style="margin-top:30px"><strong>Sources.</strong> This page summarises publicly available research and policy documents, including the South African harm reduction guideline for chemsex (2025), OUT LGBT Well-being EMH programme data, HR23 and AIDS 2026 conference presentations. Full references available on request.</p>
+    </div>
+  </section>
+</div>
+
+<!-- KNOW YOUR G -->
+<div class="page" id="page-g">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Know Your G</span></div>
+      <span class="eyebrow">Harm reduction · South Africa</span>
+      <h1>Know your <em>G.</em></h1>
+      <p class="lede">G is not like other drugs. The gap between a good night and a medical emergency is smaller than almost anything else — often less than half a millilitre. This page shows you the shape of that gap.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">First, the basics</p>
+      <h2 class="sec-title">Why G is different.</h2>
+      <p class="sec-sub">Most drugs have a forgiving curve. Take a bit more, feel a bit more. G doesn't work like that.</p>
+      <div class="grid-3">
+        <div class="tcard"><div class="n">01 · THE CURVE</div><h3>It doesn't scale</h3><p>With most drugs, doubling the dose roughly doubles the effect. With G, a small increase can send you from "chatting happily" to "unconscious on the floor."</p></div>
+        <div class="tcard"><div class="n">02 · THE CLOCK</div><h3>It lies to you</h3><p>G takes 15–30 minutes to hit (GBL hits in 5–15). That window is where most overdoses happen.</p></div>
+        <div class="tcard"><div class="n">03 · THE MIX</div><h3>It stacks</h3><p>Alcohol, benzos, opioids, ketamine and sleep meds all slow your breathing the same way G does. Together they multiply.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">Tool 01</p>
+      <h2 class="sec-title">The Margin</h2>
+      <p class="sec-sub">Drag the slider to see how the effect changes as the amount goes up. Then switch on the conditions that change everything.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">DOSE–RESPONSE</div><h3>See the shape of the curve</h3><p>Conceptual model, not a dose guide.</p></div></div>
+        <div class="mod-body">
+          <div class="chart-wrap">
+            <svg viewBox="0 0 700 320" id="gCurveSvg">
+              <defs>
+                <linearGradient id="gFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF4D8F" stop-opacity=".35"/><stop offset="100%" stop-color="#FF4D8F" stop-opacity="0"/></linearGradient>
+                <filter id="glowG"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <rect x="60" y="212" width="610" height="78" fill="#4ADE80" opacity=".05"/>
+              <rect x="60" y="164" width="610" height="48" fill="#FFB547" opacity=".06"/>
+              <rect x="60" y="105" width="610" height="59" fill="#FF4D8F" opacity=".07"/>
+              <rect x="60" y="30" width="610" height="75" fill="#FF5C5C" opacity=".1"/>
+              <line x1="60" y1="290" x2="670" y2="290" stroke="rgba(237,239,247,.2)"/>
+              <line x1="60" y1="212" x2="670" y2="212" stroke="rgba(237,239,247,.07)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="164" x2="670" y2="164" stroke="rgba(237,239,247,.07)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="105" x2="670" y2="105" stroke="rgba(237,239,247,.07)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="30" x2="670" y2="30" stroke="rgba(237,239,247,.07)" stroke-dasharray="3 4"/>
+              <text x="68" y="285" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#4ADE80" opacity=".75" letter-spacing="1">MANAGEABLE</text>
+              <text x="68" y="205" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FFB547" opacity=".85" letter-spacing="1">HEAVY</text>
+              <text x="68" y="158" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FF4D8F" opacity=".85" letter-spacing="1">DEEP SEDATION</text>
+              <text x="68" y="24" font-family="Space Grotesk" font-size="10" font-weight="700" fill="#FF5C5C" letter-spacing="1">OVERDOSE TERRITORY</text>
+              <path id="gArea" fill="url(#gFill)"/>
+              <path id="gCurve" fill="none" stroke="#FF4D8F" stroke-width="2.5" stroke-linecap="round" filter="url(#glowG)"/>
+              <line id="gMarkLine" stroke="rgba(237,239,247,.4)" stroke-width="1.2" stroke-dasharray="4 4"/>
+              <circle id="gMarkDot" r="7" fill="#FF4D8F" stroke="#0B0D17" stroke-width="3"/>
+            </svg>
+          </div>
+          <div class="slider-row"><label for="gDose">Amount <b id="gDoseVal">1.0×</b></label><input type="range" id="gDose" min="0.5" max="3" step="0.05" value="1"><div class="ticks"><span>0.5×</span><span>1× your usual</span><span>1.5×</span><span>2×</span><span>3×</span></div></div>
+          <div class="toggles" id="gToggles">
+            <button class="toggle" data-mult="1.15">Empty stomach <span class="mult">×1.15</span></button>
+            <button class="toggle" data-mult="1.5">GBL, not GHB <span class="mult">×1.5</span></button>
+            <button class="toggle" data-mult="1.8">Any alcohol <span class="mult">×1.8</span></button>
+            <button class="toggle" data-mult="2.0">Benzos, opioids or sleep meds <span class="mult">×2.0</span></button>
+          </div>
+          <div class="readout" id="gReadout">
+            <div><div class="big" id="gEffect">25<small>%</small></div></div>
+            <div><div class="zone" id="gZone">Manageable</div><div class="desc" id="gDesc">Relaxed, talkative, disinhibited. This is where most people intend to stay.</div></div>
+          </div>
+          <p class="note">Notice what happens when you switch on alcohol at your usual amount. The curve doesn't move a little — it jumps a whole zone. That's the single most important thing on this page.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">Tool 02</p>
+      <h2 class="sec-title">The Clock</h2>
+      <p class="sec-sub">The most dangerous moment on G is the twenty minutes after you take it, when you feel nothing yet.</p>
+      <div class="module">
+        <div class="mod-head">
+          <div><div class="mod-num">ONSET · PEAK · DURATION</div><h3>What's happening, minute by minute</h3><p>GBL hits roughly twice as fast as GHB.</p></div>
+          <div class="seg" id="gTypeSeg"><button class="on" data-type="ghb">GHB</button><button data-type="gbl">GBL</button></div>
+        </div>
+        <div class="mod-body">
+          <div class="chart-wrap">
+            <svg viewBox="0 0 700 240" id="gClockSvg">
+              <rect x="60" y="20" width="610" height="180" fill="rgba(255,255,255,.02)" rx="4"/>
+              <rect id="gClimbZone" x="60" y="20" width="0" height="180" fill="#FF5C5C" opacity=".08"/>
+              <line x1="60" y1="200" x2="670" y2="200" stroke="rgba(237,239,247,.2)"/>
+              <line x1="60" y1="200" x2="60" y2="20" stroke="rgba(237,239,247,.2)"/>
+              <line id="gPeakLine" stroke="#FFB547" stroke-width="1.2" stroke-dasharray="4 4" opacity=".6"/>
+              <text id="gPeakLabel" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FFB547" text-anchor="middle">PEAK</text>
+              <path id="gClockPath" fill="none" stroke="#FF4D8F" stroke-width="2.5" stroke-linecap="round"/>
+              <line id="gTimeLine" stroke="rgba(237,239,247,.4)" stroke-width="1.2"/>
+              <circle id="gTimeDot" r="7" fill="#FF4D8F" stroke="#0B0D17" stroke-width="3"/>
+              <text x="60" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">0</text>
+              <text x="212" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">1h</text>
+              <text x="365" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">2h</text>
+              <text x="517" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">3h</text>
+              <text x="670" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">4h</text>
+            </svg>
+          </div>
+          <div class="slider-row"><label for="gTime">Time <b id="gTimeVal">20 min</b></label><input type="range" id="gTime" min="0" max="240" step="1" value="20"></div>
+          <div class="tl-readout">
+            <div class="tl-stat"><div class="k">Time</div><div class="v" id="gTimeOut">20 min</div></div>
+            <div class="tl-stat"><div class="k">Effect</div><div class="v" id="gEffectOut">27%</div></div>
+            <div class="tl-stat"><div class="k">Phase</div><div class="v" id="gPhaseOut">Climbing</div></div>
+          </div>
+          <div class="tl-msg warn" id="gMsg"><strong>You can't feel it yet — but it's coming.</strong> This is the redose window. Taking more now means both doses land together. Wait at least 90 minutes from your last dose before even thinking about another.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">Tool 03</p>
+      <h2 class="sec-title">The Mix</h2>
+      <p class="sec-sub">Tap everything that's in the room tonight.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">INTERACTION CHECK</div><h3>What are you combining with G?</h3></div></div>
+        <div class="mod-body">
+          <div class="chips" id="gMixChips"></div>
+          <div class="mix-results" id="gMixResults"><div class="mix-empty">Nothing selected yet — tap the substances above.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">Tool 04</p>
+      <h2 class="sec-title">The Call</h2>
+      <p class="sec-sub">Someone is unresponsive. You have about four minutes to make the right decisions.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">OVERDOSE RESPONSE</div><h3>What to do, in order</h3><p>South Africa does not have a Good Samaritan law. Calling carries legal risk — but a life is worth more than a charge.</p></div></div>
+        <div class="steps" id="gSteps">
+          <div class="step open"><div class="step-head"><div class="step-num">1</div><div class="step-title">Check if they respond</div></div><div class="step-body"><p>Say their name loudly. Squeeze their shoulder firmly. If nothing, press hard on the centre of their chest with your knuckles — this is a <strong>sternum rub</strong> and it's painful enough to wake someone from normal sleep.</p><p>If they don't respond to that, treat it as an overdose.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">2</div><div class="step-title">Check their breathing</div></div><div class="step-body"><p>Tilt their head back, look at their chest. <strong>Look, listen, feel</strong> for 10 seconds. G overdose often looks like <strong>loud snoring, gurgling, or gasping</strong> — that is not normal sleep.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">3</div><div class="step-title">Call for help — say the word "overdose"</div></div><div class="step-body"><p>Call <strong>10111</strong> (police) or <strong>112</strong> (mobile emergency). Say: <strong>"Someone is unconscious and not breathing properly. I think it's a GHB overdose."</strong></p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">4</div><div class="step-title">If they're breathing: recovery position</div></div><div class="step-body"><p>Lie them on their <strong>side</strong>, not their back. Bring the top knee forward. Tuck the top hand under their cheek. This stops them choking if they vomit.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">5</div><div class="step-title">If they're not breathing: start CPR</div></div><div class="step-body"><p>Put them flat on their back on a hard surface. Push hard and fast in the centre of the chest — about <strong>two pushes per second</strong>.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">6</div><div class="step-title">Stay. And don't do these things.</div></div><div class="step-body"><p><strong>Stay with them.</strong> Never leave someone alone to "sleep it off." Never put them in a cold shower, make them drink water, slap them, or inject them with anything.</p><p>And never give them more G to "bring them back." That is a myth and it kills people.</p></div></div>
+        </div>
+      </div>
+      <div class="myth">
+        <h3>Four things people still believe</h3>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"He's just sleeping it off."</b> G sleep and G overdose look almost identical. If they can't be woken with a sternum rub, it's an overdose.</span></div>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"I'll wait and see if he comes round."</b> Waiting is the thing that kills people.</span></div>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"We can't call an ambulance, there's stuff here."</b> South Africa has no Good Samaritan law. But a life is worth more than a charge.</span></div>
+        <div class="myth-row"><span class="tick">✓</span><span class="txt"><b>What actually works:</b> accurate measuring with an oral syringe, never using alone, waiting a full 90 minutes before redosing, and keeping G away from alcohol and downers entirely.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- KNOW YOUR TIK -->
+<div class="page" id="page-tik">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Know Your Tik</span></div>
+      <span class="eyebrow">Harm reduction · South Africa</span>
+      <h1>Know your <em>tik.</em></h1>
+      <p class="lede">Tik doesn't kill you with one dose the way G can. It kills you slowly, over days, while you feel completely fine. The danger isn't the high. It's the gap between how loaded your body is and how normal you think you feel.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">First, the basics</p>
+      <h2 class="sec-title">Why tik is different.</h2>
+      <p class="sec-sub">G has a narrow margin. Tik has a long half-life and a lying brain.</p>
+      <div class="grid-3">
+        <div class="tcard"><div class="n">01 · THE STACK</div><h3>It accumulates</h3><p>Tik stays in your body for 10–12 hours per dose. Redosing doesn't replace the last one — it stacks on top.</p></div>
+        <div class="tcard"><div class="n">02 · THE LIE</div><h3>You can't feel the load</h3><p>Tolerance builds fast within a single session. You feel less high, so you take more, so your body gets more loaded while your brain registers less.</p></div>
+        <div class="tcard"><div class="n">03 · THE CRASH</div><h3>The comedown is the risk</h3><p>Suicidal thoughts, crushing depression, paranoia and psychosis all live in the crash.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">Tool 01</p>
+      <h2 class="sec-title">The Stack</h2>
+      <p class="sec-sub">Drag the hours and add redoses. Pink is how high you feel, cyan is how loaded your body actually is.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">CUMULATIVE LOAD</div><h3>How the gap opens up</h3><p>Conceptual model, not a dose guide.</p></div></div>
+        <div class="mod-body">
+          <div class="chart-wrap">
+            <svg viewBox="0 0 700 320" id="tikStackSvg">
+              <defs>
+                <linearGradient id="tikGapFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF4D8F" stop-opacity=".22"/><stop offset="100%" stop-color="#FF4D8F" stop-opacity=".02"/></linearGradient>
+                <filter id="glowTik"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <rect x="60" y="30" width="610" height="65" fill="#FF5C5C" opacity=".05"/>
+              <rect x="60" y="95" width="610" height="65" fill="#FF4D8F" opacity=".04"/>
+              <rect x="60" y="160" width="610" height="65" fill="#FFB547" opacity=".03"/>
+              <rect x="60" y="225" width="610" height="65" fill="#4ADE80" opacity=".04"/>
+              <line x1="60" y1="290" x2="670" y2="290" stroke="rgba(237,239,247,.2)"/>
+              <line x1="60" y1="225" x2="670" y2="225" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="160" x2="670" y2="160" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="95" x2="670" y2="95" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="30" x2="670" y2="30" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <text x="68" y="286" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FF5C5C" opacity=".85">CRITICAL LOAD</text>
+              <text x="68" y="220" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FF4D8F" opacity=".85">DANGER ZONE</text>
+              <text x="68" y="155" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FFB547" opacity=".85">LOADED</text>
+              <text x="68" y="90" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#4ADE80" opacity=".85">MANAGEABLE</text>
+              <path id="tikGapArea" fill="url(#tikGapFill)"/>
+              <path id="tikFeelPath" fill="none" stroke="#FF4D8F" stroke-width="2.5" stroke-linecap="round" filter="url(#glowTik)"/>
+              <path id="tikLoadPath" fill="none" stroke="#3EE8D8" stroke-width="2.5" stroke-linecap="round" filter="url(#glowTik)"/>
+              <line id="tikStackLine" stroke="rgba(237,239,247,.4)" stroke-width="1.2" stroke-dasharray="4 4"/>
+              <circle id="tikDotFeel" r="7" fill="#FF4D8F" stroke="#0B0D17" stroke-width="3"/>
+              <circle id="tikDotLoad" r="7" fill="#3EE8D8" stroke="#0B0D17" stroke-width="3"/>
+              <line x1="80" y1="18" x2="106" y2="18" stroke="#FF4D8F" stroke-width="2.5"/>
+              <text x="112" y="22" font-family="Space Grotesk" font-size="10" fill="rgba(237,239,247,.6)" font-weight="600">HOW YOU FEEL</text>
+              <line x1="240" y1="18" x2="266" y2="18" stroke="#3EE8D8" stroke-width="2.5"/>
+              <text x="272" y="22" font-family="Space Grotesk" font-size="10" fill="rgba(237,239,247,.6)" font-weight="600">ACTUAL LOAD</text>
+              <text x="60" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">0h</text>
+              <text x="212" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">24h</text>
+              <text x="365" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">48h</text>
+              <text x="517" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">72h</text>
+            </svg>
+          </div>
+          <div class="slider-grid">
+            <div class="slider-row"><label for="tikHours">Hours into session <b id="tikHoursVal">8h</b></label><input type="range" id="tikHours" min="1" max="72" step="1" value="8"><div class="ticks"><span>1h</span><span>24h</span><span>48h</span><span>72h</span></div></div>
+            <div class="slider-row"><label for="tikRedose">Redoses so far <b id="tikRedoseVal">2</b></label><input type="range" id="tikRedose" min="0" max="14" step="1" value="2"><div class="ticks"><span>0</span><span>4</span><span>8</span><span>12+</span></div></div>
+          </div>
+          <div class="stack-readout">
+            <div class="stat"><div class="k">How you feel</div><div class="v" id="tikFeel">—</div></div>
+            <div class="stat"><div class="k">Actual body load</div><div class="v" id="tikLoad">—</div></div>
+            <div class="stat"><div class="k">The gap</div><div class="v" id="tikGap">—</div></div>
+          </div>
+          <div class="gap-bar" id="tikGapBar"><div class="head" id="tikGapHead">The gap is <span class="num" id="tikGapNum">—</span> points.</div><div class="body" id="tikGapMsg">Adjust the sliders to see this update.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">Tool 02</p>
+      <h2 class="sec-title">The Session</h2>
+      <p class="sec-sub">A tik session isn't four hours like G. It's often a full day, sometimes three.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">0 — 72 HOURS</div><h3>What a session actually looks like</h3></div></div>
+        <div class="mod-body">
+          <div class="chart-wrap">
+            <svg viewBox="0 0 700 240" id="tikSessionSvg">
+              <rect x="60" y="20" width="610" height="180" fill="rgba(255,255,255,.02)" rx="4"/>
+              <rect id="tikSessionZone" x="60" y="20" width="0" height="180" fill="#FF4D8F" opacity=".07"/>
+              <line x1="60" y1="200" x2="670" y2="200" stroke="rgba(237,239,247,.2)"/>
+              <line x1="60" y1="155" x2="670" y2="155" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="110" x2="670" y2="110" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="65" x2="670" y2="65" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="162" y1="20" x2="162" y2="200" stroke="rgba(237,239,247,.12)" stroke-dasharray="2 3"/>
+              <line x1="265" y1="20" x2="265" y2="200" stroke="rgba(237,239,247,.12)" stroke-dasharray="2 3"/>
+              <line x1="367" y1="20" x2="367" y2="200" stroke="rgba(237,239,247,.12)" stroke-dasharray="2 3"/>
+              <line x1="470" y1="20" x2="470" y2="200" stroke="rgba(237,239,247,.12)" stroke-dasharray="2 3"/>
+              <line x1="572" y1="20" x2="572" y2="200" stroke="rgba(237,239,247,.12)" stroke-dasharray="2 3"/>
+              <path id="tikSessionPath" fill="none" stroke="#3EE8D8" stroke-width="2.5" stroke-linecap="round"/>
+              <line id="tikSessLine" stroke="rgba(237,239,247,.5)" stroke-width="1.2"/>
+              <circle id="tikSessDot" r="7" fill="#3EE8D8" stroke="#0B0D17" stroke-width="3"/>
+              <text x="60" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">0h</text>
+              <text x="162" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">12h</text>
+              <text x="265" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">24h</text>
+              <text x="367" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">36h</text>
+              <text x="470" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">48h</text>
+              <text x="572" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">60h</text>
+              <text x="670" y="218" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">72h</text>
+            </svg>
+          </div>
+          <div class="slider-row"><label for="tikSess">Time into session <b id="tikSessVal">6h</b></label><input type="range" id="tikSess" min="0" max="72" step="1" value="6"></div>
+          <div class="tl-readout">
+            <div class="tl-stat"><div class="k">Time</div><div class="v" id="tikSessTime">6h</div></div>
+            <div class="tl-stat"><div class="k">Body load</div><div class="v" id="tikSessLoad">—</div></div>
+            <div class="tl-stat"><div class="k">Phase</div><div class="v" id="tikSessPhase">Peak</div></div>
+          </div>
+          <div class="tl-msg calm" id="tikSessMsg"><strong>Peak.</strong> This is the part that feels worth it. It will not stay here — and chasing it back is how sessions become three days long.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">Tool 03</p>
+      <h2 class="sec-title">The Mix</h2>
+      <p class="sec-sub">What else is in the room? Tap everything that applies.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">INTERACTION CHECK</div><h3>What are you combining with tik?</h3></div></div>
+        <div class="mod-body">
+          <div class="chips" id="tikMixChips"></div>
+          <div class="mix-results" id="tikMixResults"><div class="mix-empty">Nothing selected yet — tap the substances above.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">Tool 04</p>
+      <h2 class="sec-title">The Body</h2>
+      <p class="sec-sub">Tik hides its own damage. Tick anything you're experiencing right now.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">SELF-CHECK</div><h3>What is your body telling you?</h3><p>Nothing here is stored or sent anywhere.</p></div></div>
+        <div class="mod-body">
+          <div class="body-grid" id="tikBodyGrid"></div>
+          <div class="body-verdict" id="tikBodyVerdict"><div class="head">Nothing selected</div><div class="body">Tick anything that applies above and this will update.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">Aftercare</p>
+      <h2 class="sec-title">The Crash</h2>
+      <p class="sec-sub">The comedown is where most tik-related harm actually happens.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">COMEDOWN CARE</div><h3>What the crash is and how to survive it</h3></div></div>
+        <div class="steps" id="tikCrashSteps">
+          <div class="step open"><div class="step-head"><div class="step-num">1</div><div class="step-title">What the crash actually is</div></div><div class="step-body"><p>Tik floods your brain with dopamine and noradrenaline. When it wears off, your brain has <strong>less dopamine than it started with</strong>. That's the crash. It's chemical, not character.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">2</div><div class="step-title">Sleep is the only real fix</div></div><div class="step-body"><p>Nothing resets the crash except sleep — and often a lot of it. Don't schedule anything important for 48 hours after a session if you can avoid it.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">3</div><div class="step-title">Food and fluids — small and often</div></div><div class="step-body"><p><strong>Sip water or electrolyte drinks constantly.</strong> Try toast, yoghurt, soup, bananas. Small amounts every hour.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">4</div><div class="step-title">The mood — and the thoughts that come with it</div></div><div class="step-body"><p>The crash brings a wave of <strong>shame, self-hatred, hopelessness and sometimes suicidal thoughts</strong>. If you're having thoughts of ending your life, call <strong>SADAG 0800 567 567</strong> or <strong>Lifeline 0861 322 322</strong>.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">5</div><div class="step-title">Do not use more to fix the crash</div></div><div class="step-body"><p>Redosing doesn't fix the depletion — it borrows more from a brain that's already overdrawn. Plan the landing before you take off.</p></div></div>
+          <div class="step"><div class="step-head"><div class="step-num">6</div><div class="step-title">When to get medical help</div></div><div class="step-body"><p><strong>Chest pain, trouble breathing, seizure, severe headache, overheating with no sweat, or fainting</strong> — get emergency help. <strong>Can't urinate for 8+ hours, paranoia, hallucinations, or thoughts of harming yourself</strong> — get help today.</p></div></div>
+        </div>
+      </div>
+      <div class="myth">
+        <h3>Four things people still believe</h3>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"I'm fine, I've been up for three days before."</b> Surviving it isn't the same as it not doing damage.</span></div>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"I'll stop when I want to."</b> Tik changes the part of your brain that makes that decision.</span></div>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"Benzos will bring me down safely."</b> They can take the edge off, but they're how people end up dependent on two things at once.</span></div>
+        <div class="myth-row"><span class="tick">✓</span><span class="txt"><b>What actually helps:</b> telling someone what you're doing before you start, setting a hard stop, keeping G and alcohol out of the session, and having a comedown plan.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- THE STACK -->
+<div class="page" id="page-stack">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>The Stack</span></div>
+      <span class="eyebrow">Tool · Cumulative load</span>
+      <h1>The gap between how you <em>feel</em> and how loaded you <em>are.</em></h1>
+      <p class="lede">Tik doesn't kill you with one dose the way G can. It kills you slowly, over days, while you feel completely fine.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <p class="sec-label">The tool</p>
+      <h2 class="sec-title">Watch the gap open.</h2>
+      <p class="sec-sub">Drag the hours and add redoses. Pink is how high you feel. Cyan is what your body is actually carrying.</p>
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">CONCEPTUAL MODEL</div><h3>72 hours of tik use</h3></div></div>
+        <div class="mod-body">
+          <div class="chart-wrap">
+            <svg viewBox="0 0 700 320" id="stackSvg2">
+              <defs>
+                <linearGradient id="stack2Fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FF4D8F" stop-opacity=".22"/><stop offset="100%" stop-color="#FF4D8F" stop-opacity=".02"/></linearGradient>
+              </defs>
+              <rect x="60" y="30" width="610" height="65" fill="#FF5C5C" opacity=".05"/>
+              <rect x="60" y="95" width="610" height="65" fill="#FF4D8F" opacity=".04"/>
+              <rect x="60" y="160" width="610" height="65" fill="#FFB547" opacity=".03"/>
+              <rect x="60" y="225" width="610" height="65" fill="#4ADE80" opacity=".04"/>
+              <line x1="60" y1="290" x2="670" y2="290" stroke="rgba(237,239,247,.2)"/>
+              <line x1="60" y1="225" x2="670" y2="225" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="160" x2="670" y2="160" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="95" x2="670" y2="95" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <line x1="60" y1="30" x2="670" y2="30" stroke="rgba(237,239,247,.06)" stroke-dasharray="3 4"/>
+              <text x="68" y="286" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FF5C5C" opacity=".85">CRITICAL LOAD</text>
+              <text x="68" y="220" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FF4D8F" opacity=".85">DANGER ZONE</text>
+              <text x="68" y="155" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#FFB547" opacity=".85">LOADED</text>
+              <text x="68" y="90" font-family="Space Grotesk" font-size="10" font-weight="600" fill="#4ADE80" opacity=".85">MANAGEABLE</text>
+              <path id="stack2GapArea" fill="url(#stack2Fill)"/>
+              <path id="stack2Feel" fill="none" stroke="#FF4D8F" stroke-width="2.5" stroke-linecap="round"/>
+              <path id="stack2Load" fill="none" stroke="#3EE8D8" stroke-width="2.5" stroke-linecap="round"/>
+              <line id="stack2Line" stroke="rgba(237,239,247,.4)" stroke-width="1.2" stroke-dasharray="4 4"/>
+              <circle id="stack2DotFeel" r="7" fill="#FF4D8F" stroke="#0B0D17" stroke-width="3"/>
+              <circle id="stack2DotLoad" r="7" fill="#3EE8D8" stroke="#0B0D17" stroke-width="3"/>
+              <text x="60" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">0h</text>
+              <text x="212" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">24h</text>
+              <text x="365" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">48h</text>
+              <text x="517" y="311" font-family="Inter" font-size="10" fill="rgba(237,239,247,.4)" text-anchor="middle">72h</text>
+            </svg>
+          </div>
+          <div class="toggles" id="stackPresets" style="margin-top:18px">
+            <button class="toggle" data-hours="4" data-redoses="2">First redose</button>
+            <button class="toggle" data-hours="14" data-redoses="3">Overnight</button>
+            <button class="toggle" data-hours="34" data-redoses="6">Second day</button>
+            <button class="toggle" data-hours="58" data-redoses="10">Day three</button>
+            <button class="toggle" data-hours="72" data-redoses="14">Full weekend</button>
+          </div>
+          <div class="slider-grid" style="margin-top:26px">
+            <div class="slider-row"><label for="stack2Hours">Hours into session <b id="stack2HoursVal">8h</b></label><input type="range" id="stack2Hours" min="1" max="72" step="1" value="8"></div>
+            <div class="slider-row"><label for="stack2Redose">Redoses so far <b id="stack2RedoseVal">2</b></label><input type="range" id="stack2Redose" min="0" max="14" step="1" value="2"></div>
+          </div>
+          <div class="stack-readout">
+            <div class="stat"><div class="k">How you feel</div><div class="v" id="stack2FeelVal">—</div></div>
+            <div class="stat"><div class="k">Actual body load</div><div class="v" id="stack2LoadVal">—</div></div>
+            <div class="stat"><div class="k">The gap</div><div class="v" id="stack2GapVal">—</div></div>
+          </div>
+          <div class="gap-bar" id="stack2GapBar"><div class="head" id="stack2GapHead">The gap is <span class="num" id="stack2GapNum">—</span> points.</div><div class="body" id="stack2GapMsg">Adjust the sliders to see this update.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap">
+      <p class="sec-label">Reading the chart</p>
+      <h2 class="sec-title">What the two lines mean.</h2>
+      <p class="sec-sub">The chart is doing one job: showing you that your felt experience and your physical state move in opposite directions the longer you go.</p>
+      <div class="grid-3">
+        <div class="tcard"><div class="n">01 · THE PINK LINE</div><h3>How you feel</h3><p>Rises fast in the first hour, peaks early, then falls steadily as tolerance builds. By hour 30 you can be at a fraction of your peak high while still feeling "on it."</p></div>
+        <div class="tcard"><div class="n">02 · THE CYAN LINE</div><h3>What your body carries</h3><p>Doesn't reset between doses. Every redose adds to the pile. It climbs for the whole session and plateaus near the top.</p></div>
+        <div class="tcard"><div class="n">03 · THE SHADED GAP</div><h3>The deception</h3><p>The coloured space between the two lines is the amount you're underestimating your own state by. Under 15 points is manageable. Over 45 points is where emergencies happen.</p></div>
+      </div>
+      <div class="myth" style="margin-top:30px">
+        <h3>Four beliefs that make the gap wider</h3>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"I feel fine, so I'm fine."</b> Feeling fine is not evidence of being fine.</span></div>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"I've done three days before and I was okay."</b> Surviving it isn't the same as it not doing damage.</span></div>
+        <div class="myth-row"><span class="x">✕</span><span class="txt"><b>"If I just take a bit more I'll get back to the peak."</b> You won't. The peak is gone.</span></div>
+        <div class="myth-row"><span class="tick">✓</span><span class="txt"><b>What actually changes the shape:</b> stopping earlier than you want to, eating and drinking at fixed intervals, sleeping before hour 24 if you can, and never mixing with G or alcohol.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- THE MIX -->
+<div class="page" id="page-mix">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>The Mix</span></div>
+      <span class="eyebrow">Tool · Interaction check</span>
+      <h1>What's in the <em>room?</em></h1>
+      <p class="lede">Tap everything that applies. Some of these combinations are the reason people end up in hospital — or don't come back.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap">
+      <div class="module">
+        <div class="mod-head"><div><div class="mod-num">MASTER INTERACTION CHECK</div><h3>Everything in the room, all at once</h3><p>Select as many substances as apply. Cards appear in order of severity.</p></div></div>
+        <div class="mod-body">
+          <div class="chips" id="mixChips"></div>
+          <div class="mix-results" id="mixResults"><div class="mix-empty">Nothing selected yet — tap the substances above.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- STORIES -->
+<div class="page" id="page-stories">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Stories</span></div>
+      <span class="eyebrow">Lived experience archive</span>
+      <h1>Stories, <em>not</em> case studies.</h1>
+      <p class="lede">Real voices from across South Africa — using, moderating, pausing, stopping. Every story credited where the contributor chose to be named, paid for their time, published with consent.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="filters">
+        <div class="filter-row"><span class="lbl">Journey</span>
+          <button class="fbtn on" data-filter="journey" data-value="all">All</button>
+          <button class="fbtn" data-filter="journey" data-value="using">Using</button>
+          <button class="fbtn" data-filter="journey" data-value="moderating">Moderating</button>
+          <button class="fbtn" data-filter="journey" data-value="pausing">Pausing</button>
+          <button class="fbtn" data-filter="journey" data-value="stopping">Stopping</button>
+          <button class="fbtn" data-filter="journey" data-value="supporting">Supporting someone</button>
+        </div>
+        <div class="filter-row"><span class="lbl">Format</span>
+          <button class="fbtn on" data-filter="format" data-value="all">All</button>
+          <button class="fbtn" data-filter="format" data-value="written">Written</button>
+          <button class="fbtn" data-filter="format" data-value="audio">Audio</button>
+          <button class="fbtn" data-filter="format" data-value="video">Video</button>
+        </div>
+        <div class="filter-row"><span class="lbl">Province</span>
+          <button class="fbtn on" data-filter="province" data-value="all">All</button>
+          <button class="fbtn" data-filter="province" data-value="gauteng">Gauteng</button>
+          <button class="fbtn" data-filter="province" data-value="western-cape">Western Cape</button>
+          <button class="fbtn" data-filter="province" data-value="kwazulu-natal">KwaZulu-Natal</button>
+          <button class="fbtn" data-filter="province" data-value="eastern-cape">Eastern Cape</button>
+        </div>
+      </div>
+      <div class="count" id="storyCount">Showing 6 of 6 stories</div>
+      <div class="stories" id="storyGrid">
+        <a href="#featuredStory" class="story" data-journey="using" data-format="written" data-province="gauteng">
+          <div class="story-img a"><span class="format">Written</span><span class="region">Joburg · 34</span></div>
+          <div class="story-body"><div class="title">"I didn't realise how much shame I was carrying"</div><div class="quote">The first time I sat with someone who didn't flinch, I cried for about ten minutes before I could say anything.</div><div class="cite">On asking for help for the first time</div><div class="meta"><span class="tag pink">Using</span><span class="tag">Written</span></div></div>
+        </a>
+        <a href="#featuredStory" class="story" data-journey="moderating" data-format="audio" data-province="western-cape">
+          <div class="story-img b"><span class="format">Audio</span><span class="region">Cape Town · 41</span></div>
+          <div class="story-body"><div class="title">"What my friends taught me that no pamphlet did"</div><div class="quote">I've learned more about safer using from my friends than from any pamphlet. But a service that actually gets it? That changed everything.</div><div class="cite">On peer knowledge and clinical care</div><div class="meta"><span class="tag cyan">Moderating</span><span class="tag">Audio</span></div></div>
+        </a>
+        <a href="#featuredStory" class="story" data-journey="pausing" data-format="written" data-province="gauteng">
+          <div class="story-img c"><span class="format">Written</span><span class="region">Soweto · 29</span></div>
+          <div class="story-body"><div class="title">"Nobody warned me about the crash"</div><div class="quote">The high I understood. The two days after, I had no idea. I thought I was broken. I wasn't — I was depleted.</div><div class="cite">On comedown care and planning the landing</div><div class="meta"><span class="tag violet">Pausing</span><span class="tag">Written</span></div></div>
+        </a>
+        <a href="#featuredStory" class="story" data-journey="stopping" data-format="video" data-province="kwazulu-natal">
+          <div class="story-img d"><span class="format">Video</span><span class="region">Durban · 38</span></div>
+          <div class="story-body"><div class="title">"I didn't stop because I hit rock bottom"</div><div class="quote">I stopped because I got tired. That's it. Not a dramatic moment. Just tired, and bored of the cycle.</div><div class="cite">On stopping without a crisis</div><div class="meta"><span class="tag pink">Stopping</span><span class="tag">Video</span></div></div>
+        </a>
+        <a href="#featuredStory" class="story" data-journey="supporting" data-format="written" data-province="gauteng">
+          <div class="story-img e"><span class="format">Written</span><span class="region">Pretoria · 45</span></div>
+          <div class="story-body"><div class="title">"My partner was using. I had no idea what to do."</div><div class="quote">Everyone talks to the person using. Nobody talks to the person watching. I needed someone to tell me I wasn't a bad partner for not knowing.</div><div class="cite">On supporting someone without losing yourself</div><div class="meta"><span class="tag violet">Supporting</span><span class="tag">Written</span></div></div>
+        </a>
+        <a href="#featuredStory" class="story" data-journey="using" data-format="audio" data-province="eastern-cape">
+          <div class="story-img f"><span class="format">Audio</span><span class="region">Nelson Mandela Bay · 26</span></div>
+          <div class="story-body"><div class="title">"Driving two hours for a hookup is its own kind of risk"</div><div class="quote">The closest scene is two hours away. So you go. And you stay longer than you meant to. And you drive home when you shouldn't.</div><div class="cite">On chemsex outside the city</div><div class="meta"><span class="tag cyan">Using</span><span class="tag">Audio</span></div></div>
+        </a>
+      </div>
+
+      <div class="featured-story" id="featuredStory">
+        <div class="kicker">Featured story · Written · Johannesburg</div>
+        <h3>"The first time I said it out loud, I said it to a stranger."</h3>
+        <div class="cnote-card"><strong>Content note:</strong> this story discusses methamphetamine use, sexual shame, and a period of suicidal thoughts. It ends well.</div>
+        <div class="lede">I'd been using for about three years before I ever said the word "chemsex" out loud. Even then, I said it to a peer worker on WhatsApp, not to anyone I knew.</div>
+        <div class="body">
+          <p>The thing nobody tells you is that the shame is not really about the drugs. It's about what the drugs let you do, and what that says about you, and who might find out. I could have told you I used. I could not have told you what I used <strong>for.</strong></p>
+          <p>What changed for me wasn't stopping. It was sitting in a room with six other men, all of us at different points in the same story, and realising that none of them looked like the version of a "chemsex user" I had in my head. They looked like my friends.</p>
+          <p>The peer worker I spoke to first never once asked me whether I wanted to stop. She asked me what I wanted my life to look like in a year. That question did more than three years of telling myself I should quit ever did.</p>
+          <p>I'm not using much now. I'm not not-using either. I have a care plan in my notes app. I have two people I text before and after. I have a GP who knows. That's the whole story, really.</p>
+          <p>If you're reading this and you've never said it out loud — say it to one person. It doesn't have to be someone who loves you. It can be a stranger on a helpline. That's what I did. It worked.</p>
+        </div>
+        <div class="foot">
+          <div class="who"><b>Anonymous</b> · Johannesburg · shared with consent · paid contributor</div>
+          <a href="#/contribute" class="btn solid">Share your story →</a>
+        </div>
+      </div>
+
+      <div class="cta-band">
+        <div><h3>Your story is a map for someone else.</h3><p>If you've lived it, you know something a textbook can't teach. Contribute a story — anonymously or credited. Contributors are paid.</p></div>
+        <a href="#/contribute" class="btn solid">Contribute →</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SA ROUTES -->
+<div class="page" id="page-routes">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>SA Routes</span></div>
+      <span class="eyebrow">Directory</span>
+      <h1>Support that <em>gets it.</em></h1>
+      <p class="lede">Services across South Africa that are LGBTQ+-aware and experienced with the specific context of drug use in sexual settings.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap">
+      <div class="cta-band" style="background:linear-gradient(135deg,rgba(255,92,92,.15),rgba(255,77,143,.1));border-color:rgba(255,92,92,.28);margin-top:0;margin-bottom:26px">
+        <div><h3 style="font-size:1.2rem">In an emergency right now?</h3><p>Overdose, unconsciousness, chest pain, seizure, or someone not breathing — call 10111 or 112. South Africa does not have a Good Samaritan law, so be aware of legal risk. But a life is worth more than a charge.</p></div>
+        <a href="tel:10111" class="btn solid" style="background:linear-gradient(135deg,var(--red),var(--pink))">Call 10111</a>
+      </div>
+
+      <div class="filters">
+        <div class="filter-row"><span class="lbl">Service type</span>
+          <button class="fbtn on" data-filter="type" data-value="all">All</button>
+          <button class="fbtn" data-filter="type" data-value="peer">Peer-led</button>
+          <button class="fbtn" data-filter="type" data-value="clinical">Clinical</button>
+          <button class="fbtn" data-filter="type" data-value="crisis">Crisis / 24-7</button>
+          <button class="fbtn" data-filter="type" data-value="harm">Harm reduction</button>
+          <button class="fbtn" data-filter="type" data-value="testing">Testing</button>
+        </div>
+        <div class="filter-row"><span class="lbl">Region</span>
+          <button class="fbtn on" data-filter="region" data-value="all">All</button>
+          <button class="fbtn" data-filter="region" data-value="gauteng">Gauteng</button>
+          <button class="fbtn" data-filter="region" data-value="western-cape">Western Cape</button>
+          <button class="fbtn" data-filter="region" data-value="kwazulu-natal">KwaZulu-Natal</button>
+          <button class="fbtn" data-filter="region" data-value="national">National / Online</button>
+        </div>
+      </div>
+
+      <div class="count" id="routeCount">Showing 10 of 10 services</div>
+
+      <div class="res-grid" id="routeGrid">
+        <div class="res" data-type="peer clinical" data-region="national">
+          <span class="pill">Peer-led</span><span class="pill clin">Clinical</span>
+          <h4>OUT LGBT Well-being</h4>
+          <p>Founded 1994, South Africa's second-oldest LGBT+ organisation. Runs the HARMless Project including an AI-powered WhatsApp chatbot for chemsex harm reduction, free HIV and sexual health services in Johannesburg, Nelson Mandela Bay and Buffalo City, mental health support, and sensitisation training for healthcare providers.</p>
+          <span class="link">out.org.za →</span><br>
+          <span class="link" style="margin-top:8px;display:inline-block">WhatsApp: 087 250 2762 →</span>
+        </div>
+        <div class="res" data-type="clinical peer" data-region="western-cape">
+          <span class="pill clin">Clinical</span><span class="pill">Peer-led</span>
+          <h4>Triangle Project</h4>
+          <p>Cape Town-based human rights organisation. Offers a needle and syringe programme, harm reduction counselling, opioid substitution therapy, sexual health clinical care, counselling, support groups, helpline, and court support for survivors of hate crimes.</p>
+          <span class="link">(021) 712 6699 →</span><br>
+          <span class="link" style="margin-top:8px;display:inline-block">triangle.org.za →</span>
+        </div>
+        <div class="res" data-type="peer harm" data-region="national">
+          <span class="pill">Peer-led</span><span class="pill harm">Harm reduction</span>
+          <h4>SANPUD</h4>
+          <p>South African Network of People Who Use Drugs. Peer-led advocacy organisation promoting rights-based drug policies and harm reduction. Runs naloxone distribution, peer education, overdose response training, and community-led rapid response programmes.</p>
+          <span class="link">sanpud.org →</span>
+        </div>
+        <div class="res" data-type="clinical harm" data-region="national">
+          <span class="pill clin">Clinical</span><span class="pill harm">Harm reduction</span>
+          <h4>TB HIV Care</h4>
+          <p>Runs drop-in centres, needle syringe programmes, opioid substitution therapy, and chemsex-specific harm reduction. Partner in the national chemsex guidelines.</p>
+          <span class="link">tbhivcare.org →</span>
+        </div>
+        <div class="res" data-type="clinical testing" data-region="national">
+          <span class="pill clin">Clinical</span>
+          <h4>Anova Health Institute</h4>
+          <p>LGBTQ+-competent health services, including HIV prevention, testing and treatment. Partner in the national chemsex guidelines.</p>
+          <span class="link">anovahealth.co.za →</span>
+        </div>
+        <div class="res" data-type="harm" data-region="national">
+          <span class="pill harm">Harm reduction</span>
+          <h4>NACOSA</h4>
+          <p>Networking HIV/AIDS Community of South Africa. Runs overdose management programmes, naloxone distribution pilots, and harm reduction training.</p>
+          <span class="link">nacosa.org.za →</span>
+        </div>
+        <div class="res" data-type="crisis" data-region="national">
+          <span class="pill crisis">24/7</span>
+          <h4>Lifeline South Africa</h4>
+          <p>24/7 crisis support. For the comedown, the shame, and the suicidal thoughts that come with it.</p>
+          <span class="link">0861 322 322 →</span>
+        </div>
+        <div class="res" data-type="crisis" data-region="national">
+          <span class="pill crisis">24/7</span>
+          <h4>SADAG</h4>
+          <p>South African Depression and Anxiety Group. Mental health support, including substance use support. 24/7 helpline.</p>
+          <span class="link">0800 567 567 →</span>
+        </div>
+        <div class="res" data-type="crisis" data-region="national">
+          <span class="pill crisis">24/7</span>
+          <h4>SA Substance Abuse Helpline</h4>
+          <p>Department of Social Development helpline for substance abuse support and referral.</p>
+          <span class="link">0800 12 13 14 →</span>
+        </div>
+        <div class="res" data-type="clinical" data-region="gauteng">
+          <span class="pill clin">Clinical</span>
+          <h4>Provincial Substance Abuse Centres</h4>
+          <p>Each province runs public substance abuse treatment centres. Gauteng has facilities in Johannesburg and Pretoria. Contact the provincial Department of Social Development for referrals.</p>
+        </div>
+      </div>
+
+      <p class="note"><strong>About this directory.</strong> Every service listed here has been contacted and confirmed as LGBTQ+-aware and non-judgemental in practice, not just on paper. We review this list quarterly. We don't receive payment for listings.</p>
+    </div>
+  </section>
+</div>
+
+<!-- CONTRIBUTE -->
+<div class="page" id="page-contribute">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Contribute</span></div>
+      <span class="eyebrow">Contribute</span>
+      <h1>Your story is a <em>map</em> for someone else.</h1>
+      <p class="lede">If you've lived it, you know something a textbook can't teach. Contribute a story — anonymously or credited, written, audio or video. Contributors are paid for their time.</p>
+    </div>
+  </div>
+
+  <section>
+    <div class="wrap wrap-narrow">
+      <p class="sec-label">Why contribute</p>
+      <h2 class="sec-title">Peer knowledge is real knowledge.</h2>
+      <div class="prose">
+        <p>Research from South Africa shows that communities engaging in chemsex have developed ground-up harm reduction practices. That knowledge hasn't been written down in one place. That's what this archive is for.</p>
+        <p>Your story might be the thing that lands for someone who has never heard their own experience reflected back. It doesn't have to be dramatic. It doesn't have to be a recovery story. It doesn't have to have a moral.</p>
+      </div>
+      <h3 class="subhead">How it works</h3>
+      <div class="grid-2">
+        <div class="tcard"><div class="n">01 · SUBMIT</div><h3>You send us your story</h3><p>Fill in the form below, or email us if you'd rather. You can submit anonymously, under a pseudonym, or with your name credited.</p></div>
+        <div class="tcard"><div class="n">02 · WE RESPOND</div><h3>A peer editor reads it</h3><p>Someone with lived experience reads your submission within two weeks and gets back to you.</p></div>
+        <div class="tcard"><div class="n">03 · WE PAY</div><h3>Payment before publication</h3><p>Contributors are paid for their time. Payment happens before publication, not after.</p></div>
+        <div class="tcard"><div class="n">04 · YOU CONTROL IT</div><h3>You can withdraw at any time</h3><p>You can ask us to change details that would identify you. You can pull it entirely, for any reason.</p></div>
+      </div>
+      <h3 class="subhead">What we're looking for</h3>
+      <div class="prose"><ul>
+        <li>Stories from across South Africa — urban and township</li>
+        <li>Any stage of the journey — using, moderating, pausing, stopping, supporting someone</li>
+        <li>Any format — written, audio, video, poetry, images</li>
+        <li>Stories from people at different ages, from different communities</li>
+        <li>Honest accounts of what helped and what didn't</li>
+      </ul></div>
+      <h3 class="subhead">What we won't publish</h3>
+      <div class="prose"><ul>
+        <li>Anything that reads as dosing instructions or a how-to guide</li>
+        <li>Anything that identifies another person without their consent</li>
+        <li>Content that glorifies harm or frames use as aspirational</li>
+        <li>Content that shames people for their choices</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="alt">
+    <div class="wrap wrap-narrow">
+      <p class="sec-label">Submission form</p>
+      <h2 class="sec-title">Tell us your story.</h2>
+      <p class="sec-sub">If you'd rather submit by phone, email or WhatsApp, contact us. If you'd like a peer editor to interview you instead of you writing it yourself, we can do that.</p>
+      <form id="contributeForm" onsubmit="handleContribute(event)">
+        <div class="form-group"><label for="cName">What should we call you?</label><input type="text" id="cName" placeholder="Name, pseudonym, or 'Anonymous'" required></div>
+        <div class="form-group"><label for="cContact">Contact email or WhatsApp (kept private)</label><input type="text" id="cContact" placeholder="email or phone number"></div>
+        <div class="form-group"><label for="cFormat">Preferred format</label><select id="cFormat"><option>Written</option><option>Audio</option><option>Video</option><option>Not sure yet</option></select></div>
+        <div class="form-group"><label for="cJourney">Journey stage (optional)</label><select id="cJourney"><option>Prefer not to say</option><option>Using</option><option>Moderating</option><option>Pausing</option><option>Stopping</option><option>Supporting someone</option></select></div>
+        <div class="form-group"><label for="cProvince">Province (optional)</label><select id="cProvince"><option>Prefer not to say</option><option>Gauteng</option><option>Western Cape</option><option>KwaZulu-Natal</option><option>Eastern Cape</option><option>Free State</option><option>Limpopo</option><option>Mpumalanga</option><option>North West</option><option>Northern Cape</option></select></div>
+        <div class="form-group"><label for="cStory">Tell us your story</label><textarea id="cStory" placeholder="Take your time. There's no word limit, and no wrong way to do this." required></textarea></div>
+        <div class="form-group"><label for="cPrivacy">Any details we should change to protect your privacy?</label><textarea id="cPrivacy" style="min-height:80px"></textarea></div>
+        <div class="form-group"><label for="cWarning">Content note: what should we warn readers about?</label><input type="text" id="cWarning" placeholder="e.g. overdose, sexual violence, suicidal thoughts"></div>
+        <div style="margin:26px 0 22px">
+          <div class="checkbox-row"><input type="checkbox" id="c1" required><label for="c1">I consent to my story being published on this site</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="c2" required><label for="c2">I understand I can withdraw my story at any time</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="c3" required><label for="c3">I confirm this story is my own</label></div>
+          <div class="checkbox-row"><input type="checkbox" id="c4" required><label for="c4">I have read the editorial guidelines</label></div>
+        </div>
+        <button type="submit" class="btn solid">Send story →</button>
+      </form>
+      <div id="contributeSuccess" style="display:none;padding:32px;background:linear-gradient(135deg,rgba(74,222,128,.1),rgba(62,232,216,.06));border:1px solid rgba(74,222,128,.25);border-radius:var(--radius-lg);margin-top:24px">
+        <h3 style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;margin-bottom:10px;color:var(--green)">Thank you.</h3>
+        <p style="font-size:.94rem;color:var(--text-dim);line-height:1.7">A peer editor will read your submission within two weeks and get back to you on the contact details you provided.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>About</span></div>
+      <span class="eyebrow">About</span>
+      <h1>Built on lived experience. <em>Governed by it.</em></h1>
+      <p class="lede">Night Routes is a peer-led resource for gay, bi, queer and other MSM and transgender women in South Africa navigating chemsex.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>What this is</h3>
+        <p>Night Routes is a story archive and navigation service. It has three jobs:</p>
+        <ol>
+          <li>Collect and publish lived experience of chemsex in South Africa, paying contributors for their knowledge.</li>
+          <li>Translate harm reduction into practical tools that show the shape of risk rather than telling people what to do.</li>
+          <li>Maintain a directory of South African services that are actually LGBTQ+-aware and non-judgemental in practice.</li>
+        </ol>
+        <h3>Governance</h3>
+        <p>Night Routes is governed by a paid peer advisory group — people with lived experience of chemsex, drug use, or sex work in South Africa. This group has decision-making power over editorial policy, funding priorities, and the direction of the site.</p>
+        <h3>Editorial policy</h3>
+        <ul>
+          <li>All stories published with explicit consent, credited where the contributor chooses to be named.</li>
+          <li>All contributors paid for their time.</li>
+          <li>All stories carry content notes where they discuss overdose, psychosis, suicidal thoughts, or sexual violence.</li>
+          <li>Contributors can withdraw their story at any time, for any reason.</li>
+          <li>We don't publish dosing instructions or how-to guides.</li>
+          <li>We don't publish anything that identifies another person without their consent.</li>
+          <li>We don't frame use as aspirational, and we don't frame stopping as the only "real" option.</li>
+        </ul>
+        <h3>Context</h3>
+        <p>South Africa released its first national harm reduction guidelines for chemsex in 2025, published in the Southern African Journal of HIV Medicine and endorsed by the SA HIV Clinicians Society, OUT LGBT Well-being, TB HIV Care, Anova Health and others.</p>
+        <p>Night Routes builds on this foundation by centring the voices of people who actually engage in chemsex.</p>
+        <h3>Land and Country</h3>
+        <p>Night Routes acknowledges the First Nations peoples of the lands on which this work takes place, and pays respect to Elders past and present. Sovereignty was never ceded. Always was, always will be.</p>
+        <h3>Contact</h3>
+        <p>General enquiries: <code>hello@nightroutes.org.za</code><br>Story pitches: <code>stories@nightroutes.org.za</code><br>Directory corrections: <code>routes@nightroutes.org.za</code></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- YOUR RIGHTS -->
+<div class="page" id="page-rights">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Your Rights</span></div>
+      <span class="eyebrow">Know your rights</span>
+      <h1>What the law actually <em>says.</em></h1>
+      <p class="lede">South Africa does not have a Good Samaritan law. Calling for help during an overdose carries legal risk. This page explains what the law actually says — and what you can still do.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="cta-band" style="background:linear-gradient(135deg,rgba(255,92,92,.15),rgba(255,77,143,.08));border-color:rgba(255,92,92,.3);margin-top:0;margin-bottom:34px">
+        <div><h3 style="font-size:1.2rem">Drug possession for personal use is a criminal offence</h3><p>Under section 5 of the Drugs and Drug Trafficking Act 140 of 1992. There is no legal protection for calling emergency services during an overdose.</p></div>
+      </div>
+      <div class="prose">
+        <h3>What this means in practice</h3>
+        <ul>
+          <li>Possessing tik, G, cocaine, heroin or other substances for personal use is a criminal offence.</li>
+          <li>You can be arrested and prosecuted for possession.</li>
+          <li>There is no legal protection for calling emergency services during an overdose.</li>
+          <li>This is a major barrier to seeking help — fear of arrest stops people from calling for ambulances.</li>
+        </ul>
+        <p><strong>Cannabis exception:</strong> Adults may use and possess cannabis in private for personal consumption. This does not cover sharing with friends or using in public.</p>
+        <h3>What happens when you call for help</h3>
+        <ol>
+          <li><strong>You call 10111 (police) or 112 (mobile emergency).</strong> You will speak to a call-taker. They will ask for the address and what's happened.</li>
+          <li><strong>Police and/or ambulance respond.</strong> In South Africa, police may attend drug-related calls. There is no legal protection from possession charges when you call for an overdose.</li>
+          <li><strong>You may be arrested.</strong> If police attend and find drugs, you could be charged with possession.</li>
+          <li><strong>But a life is worth more than a charge.</strong> If someone is dying, call for help.</li>
+        </ol>
+        <h3>Consent</h3>
+        <p>Consent must be free, informed and ongoing. You can withdraw consent at any time. If you are intoxicated to the point of being unable to consent, you cannot legally consent.</p>
+        <p>If you have experienced sexual assault, you can call the Stop Gender Violence Helpline on <strong>0800 150 150</strong> (24/7) or the National Counselling Line on <strong>0861 322 322</strong>. You do not have to report to police to access support.</p>
+        <h3>In the emergency department</h3>
+        <ul>
+          <li>Section 27(3) of the Constitution says no one may be refused emergency medical treatment.</li>
+          <li>You will be treated based on your clinical need, not your drug use.</li>
+          <li>You do not have to tell them what you took, but it helps them treat you better if you do.</li>
+          <li>Hospital staff are not required to report drug use to police in most circumstances.</li>
+        </ul>
+        <h3>Get legal advice</h3>
+        <p>Legal Aid South Africa: <strong>0800 110 110</strong><br>Lawyers for Human Rights: <strong>(011) 339 1960</strong><br>SANPUD legal support: via <strong>sanpud.org</strong></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TESTING -->
+<div class="page" id="page-testing">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Testing</span></div>
+      <span class="eyebrow">Testing &amp; prevention</span>
+      <h1>What you're carrying that you <em>can't feel.</em></h1>
+      <p class="lede">Many STIs and blood-borne viruses have no symptoms for months or years. Testing isn't about shame. It's about knowing what's actually happening in your body.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>What to test for</h3>
+        <h4>Every three months if you're sexually active with multiple partners</h4>
+        <ul><li>HIV</li><li>Syphilis</li><li>Gonorrhoea (throat, rectal, urethral swabs)</li><li>Chlamydia (throat, rectal, urethral swabs)</li></ul>
+        <h4>Annually, or more often if you inject</h4>
+        <ul><li>Hepatitis C</li><li>Hepatitis B</li></ul>
+        <h3>Where to go in South Africa</h3>
+        <p><strong>OUT LGBT Well-being</strong> — Free HIV and sexual health treatment and prevention services to MSM in Johannesburg, Nelson Mandela Bay and Buffalo City.<br>WhatsApp: 087 250 2762 · hello@out.org.za</p>
+        <p><strong>Triangle Project</strong> — Sexual health clinical care, counselling, and harm reduction in Cape Town.<br>(021) 712 6699 · health2@triangle.org.za</p>
+        <p><strong>Your local clinic</strong> — Every public primary healthcare facility in South Africa offers HIV testing and PrEP.</p>
+        <p><strong>TB HIV Care</strong> — Drop-in centres, needle syringe programmes, and HIV services across multiple provinces. tbhivcare.org</p>
+        <h3>PrEP</h3>
+        <p>PrEP is available free at 98% of public primary healthcare facilities in South Africa. Over 2 million people have been initiated on oral PrEP since 2016.</p>
+        <h3>Drug checking</h3>
+        <p>Drug checking services are not widely available in South Africa. Reagent testing kits can be purchased online, but they are not as accurate as professional drug checking.</p>
+        <h3>Hep C treatment</h3>
+        <p>Hepatitis C is now curable with 8–12 weeks of tablets. Treatment is available in South Africa, though access may vary by province.</p>
+        <h3>What to expect at a test</h3>
+        <ul>
+          <li>You'll be asked some questions about your sexual history. You can refuse to answer any question.</li>
+          <li>Blood test for HIV, syphilis, hep B and hep C.</li>
+          <li>Swabs for gonorrhoea and chlamydia — throat, rectal, and urine sample.</li>
+          <li>Results are usually back within a week or two.</li>
+          <li>If you test positive for something, treatment is available and often free.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FIRST NATIONS -->
+<div class="page" id="page-firstnations">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>First Nations</span></div>
+      <span class="eyebrow">First Nations pathways</span>
+      <h1>Cultural safety <em>first.</em></h1>
+      <p class="lede">First Nations men navigating chemsex deserve support that centres cultural safety, community and self-determination.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>Acknowledgement</h3>
+        <p>Night Routes acknowledges the First Nations peoples of the lands on which this work takes place, and pays respect to Elders past and present. We recognise that First Nations people have cared for these lands and waters for tens of thousands of years. Sovereignty was never ceded. Always was, always will be.</p>
+        <h3>What culturally safe care means</h3>
+        <ul>
+          <li>Understanding that health and wellbeing are connected to community, Country and culture.</li>
+          <li>Recognising that First Nations people carry a specific history with institutions, including health and police, that shapes how they access care.</li>
+          <li>Recognising that LGBTQ+ identity and First Nations identity are not in conflict.</li>
+          <li>Centring First Nations leadership in service design and delivery, not as consultation.</li>
+        </ul>
+        <h3>Pathways</h3>
+        <p><strong>Your local Aboriginal Community Controlled Health Organisation (ACCHO)</strong><br>Every region has an ACCHO. These are run by and for First Nations communities. They can provide primary care, AOD support, and referrals.</p>
+        <p><strong>Legal support</strong><br>Legal Aid South Africa and Lawyers for Human Rights offer free legal support, including for drug-related matters.</p>
+        <p><strong>Crisis support</strong><br>Lifeline South Africa 0861 322 322 and SADAG 0800 567 567 are available 24/7.</p>
+        <h3>Asking mainstream services for culturally safe care</h3>
+        <p>If you're accessing a mainstream service — OUT, Triangle Project, TB HIV Care — you have the right to ask for culturally safe care. You can ask:</p>
+        <ul>
+          <li>"Do you have a First Nations liaison officer or health worker?"</li>
+          <li>"How do you ensure First Nations clients receive culturally safe care?"</li>
+          <li>"Can I be connected with a First Nations-specific service if that's what I want?"</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TOWNSHIPS -->
+<div class="page" id="page-township">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Townships &amp; Chemsex Houses</span></div>
+      <span class="eyebrow">Townships &amp; chemsex houses</span>
+      <h1>Chemsex is not only a <em>middle-class</em> story.</h1>
+      <p class="lede">In South Africa, chemsex operates in two distinct contexts. One connects online and meets in private venues. The other happens in township chemsex houses.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>What chemsex houses are</h3>
+        <p>OUT LGBT Well-being identified a network of chemsex houses in Soweto — informal shared spaces, often matchbox houses, where groups of MSM live and where sexualised drug use is available to the broader community. Between January 2024 and March 2025, OUT worked with 17 of these houses. Some house up to 20 people at a time. 77% of participants used methamphetamine, 40% combined it with other substances, and 15% had injected drugs.</p>
+        <p>Chemsex houses are often connected to taverns, where bartenders facilitate access. Some are transactional — people exchange sex or drugs for a place to stay, food, or money. For some, drug use also becomes a means to cope with poverty.</p>
+        <h3>What's different in township contexts</h3>
+        <p><strong>Access to private space.</strong> Middle-class chemsex often happens in private homes or hotel rooms. Township chemsex happens in shared spaces where privacy is limited and where the line between using, living, and surviving is blurred.</p>
+        <p><strong>Poverty and survival.</strong> For some, chemsex is not only about pleasure — it's about access to shelter, food, or income. Harm reduction in this context has to account for the fact that "just stopping" may not be an option when the same space provides your bed and your next meal.</p>
+        <p><strong>Overlapping stigmas.</strong> Being MSM, using drugs, and living in a township means navigating multiple layers of stigma — from family, community, healthcare workers, and police.</p>
+        <p><strong>Services.</strong> Most LGBTQ+-specific AOD services are based in city centres. Reaching township chemsex houses requires outreach — going to where people are, not expecting them to come to you.</p>
+        <h3>What harm reduction looks like in practice</h3>
+        <ul>
+          <li><strong>Peer outreach.</strong> OUT and TB HIV Care have established champions in some chemsex houses — people who live there and can provide harm reduction information, condoms, lubricant, and referrals.</li>
+          <li><strong>HIV testing and ART retention.</strong> OUT's Soweto chemsex programme achieved a 40% increase in ART retention among participants by working directly with chemsex houses.</li>
+          <li><strong>Naloxone access.</strong> Where opioids (including whoonga) are used, naloxone distribution through peer networks saves lives.</li>
+          <li><strong>Clean injecting equipment.</strong> Needle syringe programmes run by Triangle Project and TB HIV Care can be expanded to reach township chemsex houses.</li>
+        </ul>
+        <h3>Services working in townships</h3>
+        <p><strong>OUT LGBT Well-being</strong> — Soweto chemsex programme, peer outreach, HIV testing and treatment. WhatsApp: 087 250 2762</p>
+        <p><strong>TB HIV Care</strong> — Drop-in centres, NSPs, and outreach in townships across multiple provinces. tbhivcare.org</p>
+        <p><strong>SANPUD</strong> — Peer-led naloxone distribution and overdose response training. sanpud.org</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SLAMMING -->
+<div class="page" id="page-slamming">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Slamming</span></div>
+      <span class="eyebrow">Safer injecting</span>
+      <h1>If you're going to slam, <em>know what you're doing.</em></h1>
+      <p class="lede">Slamming carries specific risks that smoking or snorting don't. Vein damage, abscesses, blood-borne viruses, and higher overdose risk.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>Getting clean equipment</h3>
+        <p>Never share needles, syringes, spoons, filters, water, or tourniquets. Sharing any of these can transmit HIV, hepatitis B and hepatitis C. The only safe option is your own equipment, used once and disposed of properly.</p>
+        <h4>Where to get free injecting equipment in South Africa</h4>
+        <ul>
+          <li><strong>Triangle Project</strong> — Needle and syringe programme in Cape Town. (021) 712 6699.</li>
+          <li><strong>TB HIV Care</strong> — Drop-in centres and NSPs across multiple provinces. tbhivcare.org.</li>
+          <li><strong>SANPUD</strong> — Peer networks and harm reduction supplies. sanpud.org.</li>
+          <li><strong>Some pharmacies</strong> — Many sell injecting equipment and provide sharps disposal.</li>
+        </ul>
+        <h3>Safer injecting practice</h3>
+        <ul>
+          <li><strong>Never share.</strong> Not needles, not spoons, not water, not filters. Hep C can live on a spoon for weeks.</li>
+          <li><strong>Wash your hands.</strong> And the site. Alcohol swabs before and after.</li>
+          <li><strong>Rotate sites.</strong> Same vein every time = collapsed vein, and eventually you'll have nowhere left.</li>
+          <li><strong>Use a new needle every time.</strong> A blunt needle causes more damage and can break off.</li>
+          <li><strong>Know your dose.</strong> Slamming hits harder and faster than smoking or snorting.</li>
+        </ul>
+        <h3>Vein care</h3>
+        <ul>
+          <li>Drink water. Dehydration makes veins harder to find.</li>
+          <li>Warm the site before injecting — a warm shower, or a warm compress.</li>
+          <li>Use a tourniquet if you need to, but release it before you push the plunger.</li>
+          <li>Alternate arms and sites. Give each site time to heal.</li>
+          <li>If a vein feels hard, cord-like, or bruised, don't use it until it heals.</li>
+        </ul>
+        <h3>What to do if you miss</h3>
+        <p>A "miss" is when the substance goes into the tissue around the vein instead of the vein itself. It hurts, it burns, and it can lead to an abscess.</p>
+        <ul>
+          <li>Stop injecting immediately.</li>
+          <li>Apply firm pressure for several minutes.</li>
+          <li>Elevate the site.</li>
+          <li>Apply a cold compress for the first 24 hours, then warm compresses.</li>
+          <li>Watch for redness, swelling, heat, or increasing pain. These are signs of infection — see a doctor.</li>
+        </ul>
+        <h3>Abscesses and infections</h3>
+        <p>If you have a red, hot, swollen, painful lump at an injecting site, or you have a fever, get medical attention. Abscesses can be drained at most emergency departments or by a GP. Don't try to pop or drain them yourself.</p>
+        <h3>Safer sharps disposal</h3>
+        <ul>
+          <li>Never put used needles in the bin.</li>
+          <li>Use a sharps container — available free from needle exchanges and some pharmacies.</li>
+          <li>If you don't have a sharps container, a rigid plastic container with a screw-top lid is a temporary option. Label it clearly.</li>
+          <li>Return full sharps containers to your needle exchange or pharmacy for disposal.</li>
+        </ul>
+        <h3>If you're injecting G</h3>
+        <p>Injecting G is far more dangerous than drinking it. The dose is much smaller, the onset is faster, and the margin for error is narrower. GBL in particular is caustic and causes tissue damage. There is no safe way to inject G, but if you're going to, use an insulin syringe, know your exact dose in millilitres, and never inject alone.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- NALOXONE -->
+<div class="page" id="page-naloxone">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Naloxone</span></div>
+      <span class="eyebrow">Overdose reversal</span>
+      <h1>Naloxone saves lives. It won't <em>save every life.</em></h1>
+      <p class="lede">Naloxone reverses opioid overdose. It doesn't touch G, doesn't touch tik, doesn't touch alcohol or benzos.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>What naloxone is</h3>
+        <p>Naloxone is a medicine that reverses the effects of opioids — heroin, oxycodone, fentanyl, methadone, buprenorphine, and whoonga/nyaope where it contains heroin. It works by blocking opioid receptors in the brain, rapidly restoring breathing in someone who has stopped breathing from an opioid overdose.</p>
+        <p>It works within 2–5 minutes when injected, or 4–8 minutes when given as a nasal spray. It lasts for 30–90 minutes, which may be shorter than the opioid itself — so a second dose may be needed.</p>
+        <div class="cta-band" style="background:linear-gradient(135deg,rgba(255,92,92,.15),rgba(255,77,143,.08));border-color:rgba(255,92,92,.3);margin:26px 0">
+          <div><h3 style="font-size:1.15rem">Naloxone does NOT reverse G, GHB, GBL, tik, cocaine, MDMA, alcohol, or benzos.</h3><p>If someone is unresponsive from one of these, naloxone will do nothing. Call for help and provide airway support.</p></div>
+        </div>
+        <h3>Where to get naloxone in South Africa</h3>
+        <ul>
+          <li><strong>SANPUD</strong> — Peer-led naloxone distribution and training. sanpud.org.</li>
+          <li><strong>NACOSA</strong> — Overdose management programmes including naloxone distribution. nacosa.org.za.</li>
+          <li><strong>Triangle Project</strong> — Harm reduction services including naloxone access in Cape Town. (021) 712 6699.</li>
+          <li><strong>TB HIV Care</strong> — Drop-in centres and OST programmes. tbhivcare.org.</li>
+          <li><strong>On prescription</strong> — Any doctor can prescribe naloxone. It is on South Africa's Essential Medicines List.</li>
+        </ul>
+        <p>Naloxone is currently available by prescription only in South Africa. Community-based distribution programmes are limited but growing through SANPUD and NACOSA pilots.</p>
+        <h3>How to use naloxone</h3>
+        <h4>Injection</h4>
+        <ol>
+          <li>Draw up the full contents of the syringe.</li>
+          <li>Inject into the thigh muscle (not a vein).</li>
+          <li>If no response in 2–3 minutes, give a second dose.</li>
+        </ol>
+        <p><strong>Always:</strong> Call for help first, or have someone call while you administer. Stay with the person. Put them in the recovery position if they're breathing. If they're not breathing, start CPR.</p>
+        <h3>What happens after naloxone</h3>
+        <p>Naloxone puts someone into immediate withdrawal. They may wake up confused, agitated, sweaty, nauseated, and in pain. This is normal and it will pass — but it can be distressing.</p>
+        <p>They still need medical assessment, even if they seem fine. Naloxone wears off before most opioids do, so overdose can recur.</p>
+        <h3>Naloxone and chemsex</h3>
+        <p>If you're using G or tik, naloxone won't help. If you're using opioids in a chemsex context — which is more common than people think, especially with whoonga and nyaope — having naloxone on hand can save a life.</p>
+        <p>It's worth carrying naloxone even if you don't use opioids yourself. You might be with someone who does.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- GLOSSARY -->
+<div class="page" id="page-glossary">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Glossary</span></div>
+      <span class="eyebrow">Glossary</span>
+      <h1>The words people <em>actually</em> use.</h1>
+      <p class="lede">Plain-language definitions of terms that come up in chemsex contexts. No judgement, no moralising, no euphemisms.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <details><summary>Chemsex</summary><div class="detail-body">Using drugs specifically in sexual contexts, most commonly by gay, bi, queer and other MSM, and transgender women. Substances usually involved are crystal methamphetamine (tik), GHB/GBL, and mephedrone, sometimes with cocaine, ketamine, or others.</div></details>
+      <details><summary>PnP</summary><div class="detail-body">"Party and Play." A term used in dating apps and online to signal that someone wants to combine drug use with sex.</div></details>
+      <details><summary>Slamming</summary><div class="detail-body">Injecting drugs, usually crystal meth, in a sexual context.</div></details>
+      <details><summary>G</summary><div class="detail-body">Slang for GHB or GBL. GBL is an industrial solvent that converts to GHB in the body. GBL hits faster and harder, and is behind many overdoses.</div></details>
+      <details><summary>GHB</summary><div class="detail-body">Gamma-hydroxybutyrate. A depressant. Prescribed in some countries for narcolepsy. Narrow margin between effect and overdose.</div></details>
+      <details><summary>GBL</summary><div class="detail-body">Gamma-butyrolactone. A prodrug for GHB — converts to GHB in the body. Faster onset, more unpredictable dose, more dangerous.</div></details>
+      <details><summary>Tik</summary><div class="detail-body">South African slang for crystal methamphetamine. Also called crystal, meth, ice. "Tik" is the most common term in South Africa, especially in the Western Cape and township contexts.</div></details>
+      <details><summary>Crystal</summary><div class="detail-body">Another term for methamphetamine. Often used by middle-class white gay men in South Africa, while "tik" is more common in township and coloured communities.</div></details>
+      <details><summary>Whoonga / Nyaope</summary><div class="detail-body">A South African street drug, usually containing heroin, sometimes with ARVs, rat poison, or other substances. Extremely addictive and dangerous. Named differently depending on region — whoonga in KZN, nyaope in Gauteng.</div></details>
+      <details><summary>Slam</summary><div class="detail-body">A single injection of a drug.</div></details>
+      <details><summary>Booty bump</summary><div class="detail-body">Administering a drug (usually tik) rectally, by dissolving it and inserting it with a syringe without a needle. Faster onset than oral, less damaging than injecting.</div></details>
+      <details><summary>Chemsex house</summary><div class="detail-body">Informal shared spaces, often in townships, where groups of MSM live and where sexualised drug use is available. In Soweto, OUT has worked with 17 such houses.</div></details>
+      <details><summary>Party pack</summary><div class="detail-body">A package of drugs, often tik and G, sold or shared together for a session.</div></details>
+      <details><summary>Care plan</summary><div class="detail-body">A written plan for a session or period of use, including limits, emergency contacts, aftercare plans, and what to do if things go wrong.</div></details>
+      <details><summary>Redose</summary><div class="detail-body">Taking another dose of a substance during a session. With tik, redosing doesn't reset the clock — it stacks on the previous dose.</div></details>
+      <details><summary>The gap</summary><div class="detail-body">The difference between how high you feel and how loaded your body actually is. Tik hides this gap; G has a narrow version of it.</div></details>
+      <details><summary>Harm reduction</summary><div class="detail-body">Practical strategies to reduce the negative consequences of drug use, without requiring abstinence. Includes things like never using alone, using clean equipment, and knowing overdose response.</div></details>
+      <details><summary>Naloxone</summary><div class="detail-body">A medicine that reverses opioid overdose. Does not work on G, tik, alcohol or benzos.</div></details>
+      <details><summary>PrEP</summary><div class="detail-body">Pre-exposure prophylaxis. A daily pill that prevents HIV. Available free at 98% of public healthcare facilities in South Africa.</div></details>
+      <details><summary>PEP</summary><div class="detail-body">Post-exposure prophylaxis. HIV medication taken within 72 hours of potential exposure. Available at emergency departments and sexual health clinics.</div></details>
+      <details><summary>Hep C</summary><div class="detail-body">Hepatitis C. A blood-borne virus that affects the liver. Curable with 8–12 weeks of tablets. Circulates in chemsex networks when snorting or injecting equipment is shared.</div></details>
+      <details><summary>Stimulant psychosis</summary><div class="detail-body">A state of paranoia, hallucinations and delusions caused by heavy or prolonged stimulant use, especially without sleep. Common beyond 48 hours of tik use.</div></details>
+      <details><summary>The crash</summary><div class="detail-body">The comedown after stimulant use. Characterised by exhaustion, low mood, shame, and sometimes suicidal thoughts. Chemical, not character.</div></details>
+      <details><summary>Needle syringe programme (NSP)</summary><div class="detail-body">A service providing free clean injecting equipment and safe disposal. Available through Triangle Project and TB HIV Care.</div></details>
+      <details><summary>Opioid substitution therapy (OST)</summary><div class="detail-body">Medication (methadone or buprenorphine) that replaces illicit opioid use, reducing withdrawal and overdose risk.</div></details>
+    </div>
+  </section>
+</div>
+
+<!-- PRIVACY -->
+<div class="page" id="page-privacy">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Privacy</span></div>
+      <span class="eyebrow">Privacy</span>
+      <h1>What we know <em>about you.</em></h1>
+      <p class="lede">Short version: not much. No tracking without consent. Anonymous story submission is genuinely anonymous.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>What we collect</h3>
+        <ul>
+          <li><strong>If you just browse:</strong> aggregate, anonymised statistics about which pages are visited. No IP addresses, no fingerprinting, no third-party tracking without consent.</li>
+          <li><strong>If you submit a story:</strong> whatever you tell us. Your name (or pseudonym), contact email or WhatsApp if you provide one, and the story itself.</li>
+          <li><strong>If you contact us:</strong> your email and message.</li>
+        </ul>
+        <h3>What we never do</h3>
+        <ul>
+          <li>We never sell your data.</li>
+          <li>We never share your data with third parties without your explicit consent.</li>
+          <li>We never use tracking that identifies you personally without your consent.</li>
+          <li>We never share your identity with police or other authorities unless legally compelled, and we will notify you if we are.</li>
+        </ul>
+        <h3>Anonymous submissions</h3>
+        <p>If you submit a story anonymously, we store no identifying information about you. We won't know who you are, and we can't be forced to reveal what we don't know.</p>
+        <h3>POPIA compliance</h3>
+        <p>Night Routes complies with the Protection of Personal Information Act (POPIA). You have the right to access, correct, or delete your personal information. To exercise these rights, contact <code>privacy@nightroutes.org.za</code>.</p>
+        <h3>Your rights</h3>
+        <ul>
+          <li>Ask what data we hold about you</li>
+          <li>Request that we delete it</li>
+          <li>Withdraw consent for your story at any time</li>
+          <li>Complain to the Information Regulator</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="page-contact">
+  <div class="hero small">
+    <div class="wrap">
+      <div class="crumb"><a href="#/home">Home</a> <span class="sep">→</span> <span>Contact</span></div>
+      <span class="eyebrow">Contact</span>
+      <h1>Get <em>in touch.</em></h1>
+      <p class="lede">For general enquiries, story pitches, directory corrections, or media requests. If you need immediate support, use the crisis rail at the bottom of any page.</p>
+    </div>
+  </div>
+  <section>
+    <div class="wrap wrap-narrow">
+      <div class="prose">
+        <h3>Email addresses</h3>
+        <ul>
+          <li><strong>General enquiries:</strong> hello@nightroutes.org.za</li>
+          <li><strong>Story pitches:</strong> stories@nightroutes.org.za</li>
+          <li><strong>Directory corrections:</strong> routes@nightroutes.org.za</li>
+          <li><strong>Privacy:</strong> privacy@nightroutes.org.za</li>
+        </ul>
+        <h3>WhatsApp</h3>
+        <p>You can also reach us on WhatsApp for story pitches and general questions: [number to be added]</p>
+        <h3>Response times</h3>
+        <p>We aim to respond to all enquiries within five business days. Story pitches are read by a peer editor and responded to within two weeks.</p>
+        <h3>If your enquiry is about a service in the directory</h3>
+        <p>If you've had a bad experience with a service listed in our directory, please tell us. We take this seriously. Directory corrections and complaints go to <code>routes@nightroutes.org.za</code>.</p>
+        <h3>If you need support now</h3>
+        <p>Emergency 10111 or 112 · Lifeline 0861 322 322 · SADAG 0800 567 567 · SA Substance Abuse Helpline 0800 12 13 14</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="brand" style="color:var(--text)"><span class="mark"></span><span>Night <span class="thin">Routes</span></span></div>
+        <p>Night Routes is peer-led harm reduction for gay, bi, queer and other MSM and transgender women in South Africa. This site is general information, not medical advice, and is not a dosing guide.</p>
+      </div>
+      <div class="foot-links">
+        <a href="#/why">Why This Exists</a><a href="#/g">Know Your G</a><a href="#/tik">Know Your Tik</a><a href="#/stack">The Stack</a><a href="#/mix">The Mix</a><a href="#/stories">Stories</a><a href="#/routes">SA Routes</a><a href="#/contribute">Contribute</a><a href="#/about">About</a><a href="#/rights">Your Rights</a><a href="#/testing">Testing</a><a href="#/firstnations">First Nations</a><a href="#/townships">Townships</a><a href="#/slamming">Slamming</a><a href="#/naloxone">Naloxone</a><a href="#/glossary">Glossary</a><a href="#/privacy">Privacy</a><a href="#/contact">Contact</a>
+      </div>
+    </div>
+    <div class="ack">Night Routes acknowledges the First Nations peoples of the lands on which this work takes place, and pays respect to Elders past and present. Sovereignty was never ceded. Always was, always will be.</div>
+  </div>
+</footer>
+
+<div class="crisis">
+  <span class="lbl">In crisis now</span>
+  <a href="tel:10111">Emergency 10111 / 112</a>
+  <a href="tel:0861322322">Lifeline 0861 322 322</a>
+  <a href="tel:0800567567">SADAG 0800 567 567</a>
+  <a href="tel:0800121314">SA Substance Abuse 0800 12 13 14</a>
+</div>
+
+<script>
+const PAGES=['home','why','g','tik','stack','mix','stories','routes','contribute','about','rights','testing','firstnations','townships','slamming','naloxone','glossary','privacy','contact'];
+
+function route(){
+  let hash=window.location.hash.replace('#/','').split('#')[0]||'home';
+  if(!PAGES.includes(hash))hash='home';
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const target=document.getElementById('page-'+hash);
+  if(target)target.classList.add('active'); else document.getElementById('page-home').classList.add('active');
+  document.querySelectorAll('#mainNav a').forEach(a=>a.classList.toggle('active',a.dataset.page===hash));
+  const cnote=document.getElementById('cnote');
+  const cnText=cnote.querySelector('strong').nextSibling;
+  const notes={
+    'why':'this page discusses HIV, psychosis, suicide, violence and the criminalisation of drug use.',
+    'g':'this page discusses drug use and overdose in detail.',
+    'tik':'this page discusses methamphetamine use, psychosis, overdose and suicide.',
+    'stack':'this page discusses methamphetamine use, psychosis and overdose.',
+    'mix':'this page discusses drug interactions, overdose and death.',
+    'routes':'this directory is reviewed quarterly. If something is out of date, contact us.',
+    'stories':'stories on this page discuss drug use, sex, overdose, psychosis and suicidal thoughts.',
+    'contribute':'this page discusses story submission and consent.',
+    'rights':'this page discusses criminalisation, arrest and emergency response.',
+    'testing':'this page discusses HIV, STIs and blood-borne viruses.',
+    'townships':'this page discusses poverty, survival and drug use in township contexts.',
+    'slamming':'this page discusses injecting drug use, vein damage and infection.',
+    'naloxone':'this page discusses opioid overdose reversal.',
+    'firstnations':'this page discusses First Nations health and cultural safety.',
+    'glossary':'this page contains drug slang and clinical terms.'
+  };
+  cnText.textContent=' '+(notes[hash]||'this site discusses drug use, sex, overdose and mental health.')+' Take care of yourself — you can leave at any time.';
+  window.scrollTo(0,0); closeMobileNav();
+}
+window.addEventListener('hashchange',route);
+window.addEventListener('DOMContentLoaded',()=>{route();initAllTools();});
+function toggleMobileNav(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open')}
+window.addEventListener('scroll',()=>{document.getElementById('toTop').classList.toggle('show',window.scrollY>400)});
+
+function initAllTools(){
+  initGCurve();initGClock();initGMix();initGAccordion();
+  initTikStack();initTikSession();initTikMix();initTikBody();initTikCrash();
+  initStackPage();initMixPage();initStoryFilters();initRouteFilters();
+}
+
+/* G — DOSE CURVE */
+function initGCurve(){
+  const slider=document.getElementById('gDose');if(!slider)return;
+  const curve=document.getElementById('gCurve'),area=document.getElementById('gArea');
+  const markLine=document.getElementById('gMarkLine'),markDot=document.getElementById('gMarkDot');
+  const effEl=document.getElementById('gEffect'),zoneEl=document.getElementById('gZone'),descEl=document.getElementById('gDesc');
+  const readout=document.getElementById('gReadout');
+  const toggles=document.querySelectorAll('#gToggles .toggle');
+  const P={x0:60,x1:670,y0:290,y1:30};const XMIN=0.5,XMAX=3.0;let mults={};
+  function effect(m){if(m<=0.4)return 0;const v=0.8*Math.pow(m-0.4,2);return 100*(1-Math.exp(-v));}
+  function totalMult(){return Object.values(mults).reduce((a,b)=>a*b,1);}
+  function xToPx(x){return P.x0+((x-XMIN)/(XMAX-XMIN))*(P.x1-P.x0);}
+  function eToPy(e){return P.y0-(e/100)*(P.y0-P.y1);}
+  function build(){const m=totalMult();let d='',first=true;
+    for(let x=XMIN;x<=XMAX+0.001;x+=0.02){const px=xToPx(x),py=eToPy(effect(x*m));d+=(first?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)+' ';first=false;}
+    curve.setAttribute('d',d);
+    area.setAttribute('d',d+'L'+xToPx(XMAX)+' '+P.y0+' L'+xToPx(XMIN)+' '+P.y0+' Z');}
+  function update(){
+    const x=parseFloat(slider.value);const e=effect(x*totalMult());
+    const px=xToPx(x),py=eToPy(e);
+    markLine.setAttribute('x1',px);markLine.setAttribute('x2',px);markLine.setAttribute('y1',P.y1);markLine.setAttribute('y2',P.y0);
+    markDot.setAttribute('cx',px);markDot.setAttribute('cy',py);
+    effEl.innerHTML=Math.round(e)+'<small>%</small>';
+    document.getElementById('gDoseVal').textContent=x.toFixed(2)+'×';
+    let name,desc,col;
+    if(e<30){name='Manageable';desc='Relaxed, talkative, disinhibited. This is where most people intend to stay.';col='#4ADE80';}
+    else if(e<55){name='Heavy';desc='Dizziness, nausea, poor coordination, memory gaps. You may not remember this part.';col='#FFB547';}
+    else if(e<78){name='Deep sedation';desc='Hard to rouse, slurred or silent, likely to vomit. Your airway is now the main risk.';col='#FF4D8F';}
+    else{name='Overdose territory';desc='Breathing slows or stops. This is a medical emergency.';col='#FF5C5C';}
+    zoneEl.textContent=name;zoneEl.style.color=col;descEl.textContent=desc;readout.style.borderColor=col+'66';
+  }
+  slider.addEventListener('input',update);
+  toggles.forEach(t=>t.addEventListener('click',()=>{
+    const k=t.textContent.trim().split(' ')[0];const mult=parseFloat(t.dataset.mult);
+    if(mults[k]){delete mults[k];t.classList.remove('on');}else{mults[k]=mult;t.classList.add('on');}
+    build();update();}));
+  build();update();
+}
+
+/* G — CLOCK */
+function initGClock(){
+  const slider=document.getElementById('gTime');if(!slider)return;
+  const path=document.getElementById('gClockPath'),line=document.getElementById('gTimeLine'),dot=document.getElementById('gTimeDot');
+  const timeEl=document.getElementById('gTimeOut'),effEl=document.getElementById('gEffectOut'),phaseEl=document.getElementById('gPhaseOut');
+  const msgEl=document.getElementById('gMsg'),peakLine=document.getElementById('gPeakLine'),peakLabel=document.getElementById('gPeakLabel');
+  const climbZone=document.getElementById('gClimbZone');
+  const segBtns=document.querySelectorAll('#gTypeSeg button');
+  const P={x0:60,x1:670,y0:200,y1:20};const TMAX=240;let type='ghb';
+  function effectAt(t,type){const cfg=type==='ghb'?{tp:60,a:3.0}:{tp:35,a:2.2};if(t<=0)return 0;
+    const r=t/cfg.tp;const e=Math.pow(r,cfg.a)*Math.exp(cfg.a*(1-r));return Math.max(0,Math.min(100,e*100));}
+  function tToPx(t){return P.x0+(t/TMAX)*(P.x1-P.x0);}
+  function eToPy(e){return P.y0-(e/100)*(P.y0-P.y1);}
+  function build(){let d='',first=true;
+    for(let t=0;t<=TMAX;t+=2){const px=tToPx(t),py=eToPy(effectAt(t,type));d+=(first?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)+' ';first=false;}
+    path.setAttribute('d',d);
+    const tp=type==='ghb'?60:35;
+    peakLine.setAttribute('x1',tToPx(tp));peakLine.setAttribute('x2',tToPx(tp));
+    peakLine.setAttribute('y1',P.y1);peakLine.setAttribute('y2',P.y0);
+    peakLabel.setAttribute('x',tToPx(tp));peakLabel.setAttribute('y',14);
+    climbZone.setAttribute('x',tToPx(0));climbZone.setAttribute('width',tToPx(tp*0.75)-tToPx(0));}
+  function update(){
+    const t=parseFloat(slider.value);const e=effectAt(t,type);
+    const px=tToPx(t),py=eToPy(e);
+    line.setAttribute('x1',px);line.setAttribute('x2',px);line.setAttribute('y1',P.y1);line.setAttribute('y2',P.y0);
+    dot.setAttribute('cx',px);dot.setAttribute('cy',py);
+    timeEl.textContent=t<60?t+' min':(t/60).toFixed(1).replace('.0','')+'h';
+    document.getElementById('gTimeVal').textContent=timeEl.textContent;
+    effEl.textContent=Math.round(e)+'%';
+    const peakT=type==='ghb'?60:35;let phase,msg,cls;
+    if(t<peakT*0.75){phase='Climbing';cls='warn';msg='<strong>You can\'t feel it yet — but it\'s coming.</strong> This is the redose window. Wait at least 90 minutes from your last dose before even thinking about another.';}
+    else if(t<=peakT*1.4){phase='Peak';cls='calm';msg='<strong>This is the peak.</strong> If it feels like too much, it will not get worse from here — but it will last.';}
+    else if(t<=peakT*3){phase='Plateau';cls='ok';msg='<strong>Plateau.</strong> You\'re still significantly affected even though you feel more normal.';}
+    else{phase='Coming down';cls='ok';msg='<strong>Coming down.</strong> Fatigue, low mood and a strong urge to redose are normal here.';}
+    phaseEl.textContent=phase;msgEl.className='tl-msg '+cls;msgEl.innerHTML=msg;
+  }
+  slider.addEventListener('input',update);
+  segBtns.forEach(b=>b.addEventListener('click',()=>{segBtns.forEach(x=>x.classList.remove('on'));b.classList.add('on');type=b.dataset.type;build();update();}));
+  build();update();
+}
+
+/* G — MIX */
+function initGMix(){
+  const chipsEl=document.getElementById('gMixChips');if(!chipsEl)return;
+  const SUBS=[
+    {label:'Alcohol',sev:'extreme',note:'Both slow your breathing and heart rate. This is the single most common combination in G overdoses and deaths.'},
+    {label:'Benzos (Xanax, Valium…)',sev:'extreme',note:'Stacks directly on the same receptors G affects. This combination stops breathing.'},
+    {label:'Opioids (heroin, oxy, whoonga)',sev:'extreme',note:'Two depressants on the same system. Naloxone will NOT reverse G — it only works on opioids.'},
+    {label:'Tik / crystal',sev:'high',note:'The stimulant masks how sedated you are, so you redose past your limit. When the tik wears off, the G hits all at once.'},
+    {label:'Cocaine',sev:'high',note:'Same trap as tik — masks the sedation, then the crash.'},
+    {label:'Ketamine',sev:'high',note:'Both cause dissociation and sedation. A K-hole and a G overdose are genuinely hard to tell apart.'},
+    {label:'Sleep meds & antihistamines',sev:'moderate',note:'Sedatives you might not think of as drugs. They add to the depression.'},
+    {label:'Poppers',sev:'moderate',note:'Drops your blood pressure fast. Never combine with Viagra or Cialis.'},
+    {label:'Cannabis',sev:'moderate',note:'Adds sedation and nausea.'},
+    {label:'ADHD stimulants',sev:'moderate',note:'Masks sedation — same redosing trap as tik.'}
+  ];
+  const results=document.getElementById('gMixResults');const sel=new Set();
+  SUBS.forEach((s,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=s.label;b.dataset.i=i;
+    b.addEventListener('click',()=>{if(sel.has(i)){sel.delete(i);b.classList.remove('on');}else{sel.add(i);b.classList.add('on');}render();});
+    chipsEl.appendChild(b);});
+  function render(){
+    if(sel.size===0){results.innerHTML='<div class="mix-empty">Nothing selected yet — tap the substances above.</div>';return;}
+    const order={extreme:0,high:1,moderate:2,low:3};
+    const picked=[...sel].map(i=>SUBS[i]).sort((a,b)=>order[a.sev]-order[b.sev]);
+    let html='';
+    picked.forEach(s=>{html+=`<div class="mix-item ${s.sev}"><div class="mix-top"><span class="name">G + ${s.label}</span><span class="badge ${s.sev}">${s.sev}</span></div><p>${s.note}</p></div>`;});
+    const hasExtreme=picked.some(s=>s.sev==='extreme');
+    let verdict;
+    if(hasExtreme)verdict='<strong>This combination can kill you tonight.</strong> If you are going to use anyway, do not use alone, tell someone what you have taken, and keep your phone charged.';
+    else verdict='<strong>Lower risk — but not no risk.</strong> G still has a narrow margin on its own. Measure accurately, wait a full 90 minutes before redosing, and don\'t use alone.';
+    html+=`<div class="mix-verdict">${verdict}</div>`;
+    results.innerHTML=html;
+  }
+}
+
+/* G — ACCORDION */
+function initGAccordion(){
+  document.querySelectorAll('#gSteps .step').forEach(step=>{
+    step.querySelector('.step-head').addEventListener('click',()=>{
+      const isOpen=step.classList.contains('open');
+      document.querySelectorAll('#gSteps .step').forEach(s=>s.classList.remove('open'));
+      if(!isOpen)step.classList.add('open');});
+  });
+}
+
+/* TIK — STACK */
+function initTikStack(){
+  const hoursEl=document.getElementById('tikHours');if(!hoursEl)return;
+  const redoseEl=document.getElementById('tikRedose');
+  const P={x0:60,x1:670,y0:290,y1:30};const HMAX=72;
+  const feelPath=document.getElementById('tikFeelPath'),loadPath=document.getElementById('tikLoadPath');
+  const gapArea=document.getElementById('tikGapArea'),stackLine=document.getElementById('tikStackLine');
+  const dotFeel=document.getElementById('tikDotFeel'),dotLoad=document.getElementById('tikDotLoad');
+  function perceived(h,r){return Math.min(100,88*(1-Math.exp(-h/1.2))*Math.exp(-h/40)*(1+Math.min(r*0.03,0.28)));}
+  function actualLoad(h,r){return Math.min(100,100*(1-Math.exp(-(h*1.8+r*18)/90)));}
+  function hToPx(h){return P.x0+(h/HMAX)*(P.x1-P.x0);}
+  function vToPy(v){return P.y0-(v/100)*(P.y0-P.y1);}
+  function build(){const r=parseFloat(redoseEl.value);let fd='',ld='',first=true;
+    for(let h=0;h<=HMAX+0.001;h+=0.5){const px=hToPx(h);
+      fd+=(first?'M':'L')+px.toFixed(1)+' '+vToPy(perceived(h,r)).toFixed(1)+' ';
+      ld+=(first?'M':'L')+px.toFixed(1)+' '+vToPy(actualLoad(h,r)).toFixed(1)+' ';
+      first=false;}
+    feelPath.setAttribute('d',fd);loadPath.setAttribute('d',ld);
+    let gd=fd;for(let h=HMAX;h>=0;h-=0.5){gd+='L'+hToPx(h).toFixed(1)+' '+vToPy(actualLoad(h,r)).toFixed(1)+' ';}
+    gd+='Z';gapArea.setAttribute('d',gd);}
+  function update(){
+    const h=parseFloat(hoursEl.value),r=parseFloat(redoseEl.value);
+    const feel=perceived(h,r),load=actualLoad(h,r);const gap=Math.max(0,load-feel);
+    const px=hToPx(h);
+    stackLine.setAttribute('x1',px);stackLine.setAttribute('x2',px);stackLine.setAttribute('y1',P.y1);stackLine.setAttribute('y2',P.y0);
+    dotFeel.setAttribute('cx',px);dotFeel.setAttribute('cy',vToPy(feel));
+    dotLoad.setAttribute('cx',px);dotLoad.setAttribute('cy',vToPy(load));
+    document.getElementById('tikHoursVal').textContent=h+'h';
+    document.getElementById('tikRedoseVal').textContent=r;
+    document.getElementById('tikFeel').innerHTML=Math.round(feel)+'<small>%</small>';
+    document.getElementById('tikLoad').innerHTML=Math.round(load)+'<small>%</small>';
+    document.getElementById('tikGap').innerHTML=Math.round(gap)+'<small> pts</small>';
+    document.getElementById('tikGapNum').textContent=Math.round(gap);
+    let col,bg,msg;
+    if(gap<15){col='#4ADE80';bg='rgba(74,222,128,.07)';msg='Your felt high and your body load are still roughly aligned. This is the safest point in a session.';}
+    else if(gap<30){col='#FFB547';bg='rgba(255,181,71,.08)';msg='The gap is opening. You feel meaningfully less loaded than you are — which is what makes people redose past their limit.';}
+    else if(gap<45){col='#FF4D8F';bg='rgba(255,77,143,.09)';msg='This is the danger zone. Your judgement about how loaded you are is now compromised by the very drug you\'re using to judge it.';}
+    else{col='#FF5C5C';bg='rgba(255,92,92,.1)';msg='You are carrying a critical load while feeling a fraction of it. This is where cardiac events, psychosis and collapse happen.';}
+    document.getElementById('tikGap').style.color=col;
+    document.getElementById('tikGapBar').style.background=bg;
+    document.getElementById('tikGapBar').style.borderLeftColor=col;
+    document.getElementById('tikGapHead').style.color=col;
+    document.getElementById('tikGapMsg').textContent=msg;
+  }
+  hoursEl.addEventListener('input',update);
+  redoseEl.addEventListener('input',()=>{build();update();});
+  build();update();
+}
+
+/* TIK — SESSION */
+function initTikSession(){
+  const slider=document.getElementById('tikSess');if(!slider)return;
+  const path=document.getElementById('tikSessionPath'),line=document.getElementById('tikSessLine'),dot=document.getElementById('tikSessDot');
+  const zone=document.getElementById('tikSessionZone');
+  const P={x0:60,x1:670,y0:200,y1:20};
+  function load(t){return Math.min(97,100*(1-Math.exp(-t/22)));}
+  function tToPx(t){return P.x0+(t/72)*(P.x1-P.x0);}
+  function vToPy(v){return P.y0-(v/100)*(P.y0-P.y1);}
+  function build(){let d='',first=true;
+    for(let t=0;t<=72;t+=0.5){d+=(first?'M':'L')+tToPx(t).toFixed(1)+' '+vToPy(load(t)).toFixed(1)+' ';first=false;}
+    path.setAttribute('d',d);}
+  function update(){
+    const t=parseFloat(slider.value);const l=load(t);
+    const px=tToPx(t),py=vToPy(l);
+    line.setAttribute('x1',px);line.setAttribute('x2',px);line.setAttribute('y1',P.y1);line.setAttribute('y2',P.y0);
+    dot.setAttribute('cx',px);dot.setAttribute('cy',py);
+    zone.setAttribute('x',P.x0);zone.setAttribute('width',(px-P.x0).toFixed(1));
+    document.getElementById('tikSessVal').textContent=t<24?t+'h':(t/24).toFixed(1).replace('.0','')+' days';
+    document.getElementById('tikSessTime').textContent=t<24?t+'h':(t/24).toFixed(1).replace('.0','')+' days';
+    document.getElementById('tikSessLoad').textContent=Math.round(l)+'%';
+    let phase,msg,cls;
+    if(t<1){phase='Come-up';cls='ok';msg='<strong>Come-up.</strong> Heart rate climbs, jaw starts to move. Drink a full glass of water and eat something.';}
+    else if(t<6){phase='Peak';cls='calm';msg='<strong>Peak.</strong> This is the part that feels worth it. It will not stay here — and chasing it back is how sessions become three days long.';}
+    else if(t<14){phase='Long plateau';cls='calm';msg='<strong>Long plateau.</strong> You feel high but the peak has passed. This is when most people redose for the first time.';}
+    else if(t<26){phase='Still loaded';cls='warn';msg='<strong>Still heavily loaded.</strong> You feel more normal than you are. Do not drive. Eat and drink something now.';}
+    else if(t<40){phase='Sleep deprivation';cls='warn';msg='<strong>Sleep deprivation begins.</strong> After 24 hours awake, cognition drops sharply.';}
+    else if(t<56){phase='Psychosis risk';cls='warn';msg='<strong>High psychosis risk.</strong> Stimulant psychosis is common beyond 48 hours without sleep.';}
+    else{phase='Critical';cls='warn';msg='<strong>Critical.</strong> Overheating, dehydration, cardiac strain and psychosis are all live risks. Stop and sleep, or get medical help.';}
+    document.getElementById('tikSessPhase').textContent=phase;
+    const msgEl=document.getElementById('tikSessMsg');msgEl.className='tl-msg '+cls;msgEl.innerHTML=msg;
+  }
+  slider.addEventListener('input',update);build();update();
+}
+
+/* TIK — MIX */
+function initTikMix(){
+  const chipsEl=document.getElementById('tikMixChips');if(!chipsEl)return;
+  const SUBS=[
+    {label:'G / GHB / GBL',sev:'extreme',note:'The most dangerous combination in chemsex. Tik masks how sedated the G is making you, so you take more, then when the tik wears off the G lands all at once.'},
+    {label:'Alcohol',sev:'extreme',note:'Dehydrates you further, strains the liver and heart, and masks the sedation.'},
+    {label:'Opioids (heroin, oxy, whoonga)',sev:'extreme',note:'Tik masks the respiratory depression until it doesn\'t. Then you stop breathing.'},
+    {label:'Cocaine',sev:'extreme',note:'Two stimulants stacking on the heart. Chest pain, arrhythmia and stroke risk multiply.'},
+    {label:'Whoonga / nyaope',sev:'extreme',note:'Often contains heroin and ARVs. Combined with tik, extreme overdose risk.'},
+    {label:'Ketamine',sev:'high',note:'Both cause dissociation and can trigger psychosis.'},
+    {label:'Benzos',sev:'high',note:'Commonly used to land. Never mix with G.'},
+    {label:'Poppers',sev:'high',note:'Blood pressure drops fast, on top of a heart already working hard.'},
+    {label:'ED meds',sev:'high',note:'Strains the cardiovascular system on top of tik.'},
+    {label:'HIV medications',sev:'moderate',note:'Some ARVs interact with recreational drugs. Tell your HIV clinician what you use.'},
+    {label:'Cannabis',sev:'moderate',note:'Can help with appetite and sleep on the comedown, but increases paranoia during the session.'}
+  ];
+  const results=document.getElementById('tikMixResults');const sel=new Set();
+  SUBS.forEach((s,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=s.label;b.dataset.i=i;
+    b.addEventListener('click',()=>{if(sel.has(i)){sel.delete(i);b.classList.remove('on');}else{sel.add(i);b.classList.add('on');}render();});
+    chipsEl.appendChild(b);});
+  function render(){
+    if(sel.size===0){results.innerHTML='<div class="mix-empty">Nothing selected yet — tap the substances above.</div>';return;}
+    const order={extreme:0,high:1,moderate:2,low:3};
+    const picked=[...sel].map(i=>SUBS[i]).sort((a,b)=>order[a.sev]-order[b.sev]);
+    let html='';
+    picked.forEach(s=>{html+=`<div class="mix-item ${s.sev}"><div class="mix-top"><span class="name">Tik + ${s.label}</span><span class="badge ${s.sev}">${s.sev}</span></div><p>${s.note}</p></div>`;});
+    const hasExtreme=picked.some(s=>s.sev==='extreme');
+    let verdict;
+    if(hasExtreme)verdict='<strong>This combination can kill you tonight.</strong> If you are going to use anyway, do not use alone, tell someone what you have taken.';
+    else verdict='<strong>Lower risk — but not no risk.</strong> Tik still accumulates and hides its own damage.';
+    html+=`<div class="mix-verdict">${verdict}</div>`;results.innerHTML=html;
+  }
+}
+
+/* TIK — BODY */
+function initTikBody(){
+  const grid=document.getElementById('tikBodyGrid');if(!grid)return;
+  const SIGNS=[
+    {sev:'crit',label:'Chest pain or tightness',note:'Crushing, pressure or tightness in the chest.'},
+    {sev:'crit',label:'Trouble breathing',note:'Short of breath at rest.'},
+    {sev:'crit',label:'Seizure or fitting',note:'Any seizure is a medical emergency on stimulants.'},
+    {sev:'crit',label:'Severe headache with vision changes',note:'Worst headache of your life.'},
+    {sev:'crit',label:'Overheating with no sweat',note:'Hot, dry skin, confusion. Heatstroke risk.'},
+    {sev:'crit',label:'Fainting or blacking out',note:'Any loss of consciousness needs assessment.'},
+    {sev:'med',label:'Can\'t urinate for 8+ hours',note:'Blocked urination is a common tik complication.'},
+    {sev:'med',label:'Severe abdominal pain',note:'Can indicate a serious gut or kidney problem.'},
+    {sev:'med',label:'Paranoia that isn\'t easing',note:'Suspicion, fear or feeling watched.'},
+    {sev:'med',label:'Hearing or seeing things others don\'t',note:'Stimulant psychosis.'},
+    {sev:'med',label:'Thoughts of harming yourself',note:'Common on the comedown. Call SADAG 0800 567 567.'},
+    {sev:'slow',label:'Jaw clenching or teeth grinding',note:'Common. Magnesium and gum help.'},
+    {sev:'slow',label:'Haven\'t eaten in 24+ hours',note:'Low blood sugar makes everything worse.'},
+    {sev:'slow',label:'Haven\'t slept in 24+ hours',note:'Cognition drops sharply. Psychosis risk climbs fast.'},
+    {sev:'slow',label:'Skin picking or scratching',note:'Compulsive and hard to stop.'},
+    {sev:'slow',label:'Racing heart',note:'Common, but with chest pain get help.'},
+    {sev:'slow',label:'Sudden weight loss',note:'Sustained use causes real physical decline.'},
+    {sev:'slow',label:'Feeling flat, empty or hopeless',note:'The crash. It is chemical and it will pass.'}
+  ];
+  const verdict=document.getElementById('tikBodyVerdict');const sel=new Set();
+  SIGNS.forEach((s,i)=>{const el=document.createElement('div');
+    el.className='check '+(s.sev==='crit'?'urgent':s.sev==='med'?'warn':'');
+    el.innerHTML=`<div class="box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="txt"><b>${s.label}</b><span>${s.note}</span></div>`;
+    el.addEventListener('click',()=>{if(sel.has(i)){sel.delete(i);el.classList.remove('on');}else{sel.add(i);el.classList.add('on');}render();});
+    grid.appendChild(el);});
+  function render(){
+    if(sel.size===0){verdict.className='body-verdict';verdict.innerHTML='<div class="head">Nothing selected</div><div class="body">Tick anything that applies above and this will update.</div>';return;}
+    const picked=[...sel].map(i=>SIGNS[i]);
+    const hasCrit=picked.some(s=>s.sev==='crit');
+    const hasMed=picked.some(s=>s.sev==='med');
+    const hasSlow=picked.some(s=>s.sev==='slow');
+    let cls,head,body;
+    if(hasCrit){cls='crit';head='Call for help now.';body='You have ticked at least one sign that is a medical emergency. Call 10111 or 112 and say "I need an ambulance".';}
+    else if(hasMed){cls='med';head='Get medical or crisis help today.';body='What you have ticked needs a real person. For suicidal thoughts, call SADAG 0800 567 567 or Lifeline 0861 322 322.';}
+    else if(hasSlow){cls='slow';head='Your body is asking you to slow down.';body='None of these are emergencies on their own — but together they are the pattern that leads to one.';}
+    else{cls='';head='Nothing urgent flagged.';body='Keep checking in. The most dangerous signs often appear quietly.';}
+    verdict.className='body-verdict '+cls;
+    verdict.innerHTML=`<div class="head">${head}</div><div class="body">${body}</div>`;
+  }
+}
+
+/* TIK — CRASH */
+function initTikCrash(){
+  document.querySelectorAll('#tikCrashSteps .step').forEach(step=>{
+    step.querySelector('.step-head').addEventListener('click',()=>{
+      const isOpen=step.classList.contains('open');
+      document.querySelectorAll('#tikCrashSteps .step').forEach(s=>s.classList.remove('open'));
+      if(!isOpen)step.classList.add('open');});
+  });
+}
+
+/* STACK PAGE */
+function initStackPage(){
+  const hoursEl=document.getElementById('stack2Hours');if(!hoursEl)return;
+  const redoseEl=document.getElementById('stack2Redose');
+  const P={x0:60,x1:670,y0:290,y1:30};const HMAX=72;
+  const feelPath=document.getElementById('stack2Feel'),loadPath=document.getElementById('stack2Load');
+  const gapArea=document.getElementById('stack2GapArea'),line=document.getElementById('stack2Line');
+  const dotFeel=document.getElementById('stack2DotFeel'),dotLoad=document.getElementById('stack2DotLoad');
+  const presets=document.querySelectorAll('#stackPresets .toggle');
+  function perceived(h,r){return Math.min(100,88*(1-Math.exp(-h/1.2))*Math.exp(-h/40)*(1+Math.min(r*0.03,0.28)));}
+  function actualLoad(h,r){return Math.min(100,100*(1-Math.exp(-(h*1.8+r*18)/90)));}
+  function hToPx(h){return P.x0+(h/HMAX)*(P.x1-P.x0);}
+  function vToPy(v){return P.y0-(v/100)*(P.y0-P.y1);}
+  function build(){const r=parseFloat(redoseEl.value);let fd='',ld='',first=true;
+    for(let h=0;h<=HMAX+0.001;h+=0.5){const px=hToPx(h);
+      fd+=(first?'M':'L')+px.toFixed(1)+' '+vToPy(perceived(h,r)).toFixed(1)+' ';
+      ld+=(first?'M':'L')+px.toFixed(1)+' '+vToPy(actualLoad(h,r)).toFixed(1)+' ';
+      first=false;}
+    feelPath.setAttribute('d',fd);loadPath.setAttribute('d',ld);
+    let gd=fd;for(let h=HMAX;h>=0;h-=0.5){gd+='L'+hToPx(h).toFixed(1)+' '+vToPy(actualLoad(h,r)).toFixed(1)+' ';}
+    gd+='Z';gapArea.setAttribute('d',gd);}
+  function update(){
+    const h=parseFloat(hoursEl.value),r=parseFloat(redoseEl.value);
+    const feel=perceived(h,r),load=actualLoad(h,r);const gap=Math.max(0,load-feel);
+    const px=hToPx(h);
+    line.setAttribute('x1',px);line.setAttribute('x2',px);line.setAttribute('y1',P.y1);line.setAttribute('y2',P.y0);
+    dotFeel.setAttribute('cx',px);dotFeel.setAttribute('cy',vToPy(feel));
+    dotLoad.setAttribute('cx',px);dotLoad.setAttribute('cy',vToPy(load));
+    document.getElementById('stack2HoursVal').textContent=h<24?h+'h':(h/24).toFixed(1).replace('.0','')+' days';
+    document.getElementById('stack2RedoseVal').textContent=r;
+    document.getElementById('stack2FeelVal').innerHTML=Math.round(feel)+'<small>%</small>';
+    document.getElementById('stack2LoadVal').innerHTML=Math.round(load)+'<small>%</small>';
+    document.getElementById('stack2GapVal').innerHTML=Math.round(gap)+'<small> pts</small>';
+    document.getElementById('stack2GapNum').textContent=Math.round(gap);
+    let col,bg,msg;
+    if(gap<15){col='#4ADE80';bg='rgba(74,222,128,.07)';msg='Your felt high and your body load are still roughly aligned. This is your window to eat, drink and decide how far you\'re willing to go.';}
+    else if(gap<30){col='#FFB547';bg='rgba(255,181,71,.08)';msg='The gap is opening. If you\'re going to stop, this is the easiest point to do it.';}
+    else if(gap<45){col='#FF4D8F';bg='rgba(255,77,143,.09)';msg='This is the danger zone. Your judgement about how loaded you are is now compromised by the very drug you\'re using to judge it.';}
+    else{col='#FF5C5C';bg='rgba(255,92,92,.1)';msg='You are carrying a critical load while feeling a fraction of it. Stop. Eat. Drink electrolytes. Sleep if you can.';}
+    document.getElementById('stack2GapVal').style.color=col;
+    document.getElementById('stack2GapBar').style.background=bg;
+    document.getElementById('stack2GapBar').style.borderLeftColor=col;
+    document.getElementById('stack2GapHead').style.color=col;
+    document.getElementById('stack2GapMsg').textContent=msg;
+  }
+  hoursEl.addEventListener('input',()=>{presets.forEach(p=>p.classList.remove('on'));update();});
+  redoseEl.addEventListener('input',()=>{presets.forEach(p=>p.classList.remove('on'));build();update();});
+  presets.forEach(p=>p.addEventListener('click',()=>{presets.forEach(x=>x.classList.remove('on'));p.classList.add('on');
+    hoursEl.value=p.dataset.hours;redoseEl.value=p.dataset.redoses;build();update();}));
+  build();update();
+}
+
+/* MIX PAGE */
+function initMixPage(){
+  const chipsEl=document.getElementById('mixChips');if(!chipsEl)return;
+  const SUBS=[
+    {label:'Alcohol',sev:'extreme',note:'Both slow your breathing and heart rate. Combined with G, this is the single most common combination in overdoses and deaths.'},
+    {label:'G / GHB / GBL',sev:'extreme',note:'The most dangerous combination in chemsex. Tik masks how sedated the G is making you, so you take more, then when the tik wears off the G lands all at once.'},
+    {label:'Opioids',sev:'extreme',note:'Two depressants on the same system. Naloxone will reverse the opioids but not the G or tik.'},
+    {label:'Benzos',sev:'extreme',note:'Stacks directly on the same receptors G affects. This combination stops breathing.'},
+    {label:'Cocaine',sev:'extreme',note:'Two stimulants stacking on the heart. Chest pain, arrhythmia and stroke risk multiply.'},
+    {label:'Whoonga / nyaope',sev:'extreme',note:'Often contains heroin and ARVs. Combined with tik or G, extreme overdose risk.'},
+    {label:'Tik / crystal',sev:'high',note:'Masks how sedated you are, so you redose past your limit. When the tik wears off, the G hits all at once.'},
+    {label:'Ketamine',sev:'high',note:'Both cause dissociation and can trigger psychosis.'},
+    {label:'ED meds',sev:'high',note:'Never combine with poppers — blood pressure collapses. Priapism is a medical emergency.'},
+    {label:'Poppers',sev:'high',note:'Blood pressure drops fast. Fainting and falls are common.'},
+    {label:'Sleep meds & antihistamines',sev:'moderate',note:'Sedatives you might not think of as drugs.'},
+    {label:'HIV medications',sev:'moderate',note:'Some ARVs interact with recreational drugs. Tell your HIV clinician what you use.'},
+    {label:'Cannabis',sev:'moderate',note:'Can help on the comedown, but increases paranoia during the session.'},
+    {label:'ADHD stimulants',sev:'moderate',note:'Stacks on the same system. More strain on the heart.'}
+  ];
+  const results=document.getElementById('mixResults');const sel=new Set();
+  SUBS.forEach((s,i)=>{const b=document.createElement('button');b.className='chip';b.textContent=s.label;b.dataset.i=i;
+    b.addEventListener('click',()=>{if(sel.has(i)){sel.delete(i);b.classList.remove('on');}else{sel.add(i);b.classList.add('on');}render();});
+    chipsEl.appendChild(b);});
+  function render(){
+    if(sel.size===0){results.innerHTML='<div class="mix-empty">Nothing selected yet — tap the substances above.</div>';return;}
+    const order={extreme:0,high:1,moderate:2,low:3};
+    const picked=[...sel].map(i=>SUBS[i]).sort((a,b)=>order[a.sev]-order[b.sev]);
+    let html='';
+    picked.forEach(s=>{html+=`<div class="mix-item ${s.sev}"><div class="mix-top"><span class="name">${s.label}</span><span class="badge ${s.sev}">${s.sev}</span></div><p>${s.note}</p></div>`;});
+    const hasExtreme=picked.some(s=>s.sev==='extreme');
+    const hasHigh=picked.some(s=>s.sev==='high');
+    let verdict;
+    if(hasExtreme)verdict='<strong>This combination can kill you tonight.</strong> If you are going to use anyway, do not use alone, tell someone what you have taken, and keep your phone charged with emergency numbers ready to call.';
+    else if(hasHigh)verdict='<strong>This combination carries serious risk.</strong> Each substance hides the effects of the other, so you lose the ability to judge your own state.';
+    else verdict='<strong>Lower risk — but not no risk.</strong> G and tik still have narrow margins on their own.';
+    html+=`<div class="mix-verdict">${verdict}</div>`;results.innerHTML=html;
+  }
+}
+
+/* STORY FILTERS */
+function initStoryFilters(){
+  const state={journey:'all',format:'all',province:'all'};
+  document.querySelectorAll('#page-stories .fbtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const f=btn.dataset.filter,v=btn.dataset.value;state[f]=v;
+      document.querySelectorAll(`#page-stories .fbtn[data-filter="${f}"]`).forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');apply();});});
+  function apply(){
+    const cards=document.querySelectorAll('#storyGrid .story');let shown=0;
+    cards.forEach(c=>{
+      const matchJ=state.journey==='all'||c.dataset.journey===state.journey;
+      const matchF=state.format==='all'||c.dataset.format===state.format;
+      const matchP=state.province==='all'||c.dataset.province===state.province;
+      if(matchJ&&matchF&&matchP){c.classList.remove('hidden');shown++;}else c.classList.add('hidden');});
+    document.getElementById('storyCount').textContent=`Showing ${shown} of ${cards.length} stories`;
+  }
+}
+
+/* ROUTE FILTERS */
+function initRouteFilters(){
+  const state={type:'all',region:'all'};
+  document.querySelectorAll('#page-routes .fbtn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const f=btn.dataset.filter,v=btn.dataset.value;state[f]=v;
+      document.querySelectorAll(`#page-routes .fbtn[data-filter="${f}"]`).forEach(b=>b.classList.remove('on'));
+      btn.classList.add('on');apply();});});
+  function apply(){
+    const cards=document.querySelectorAll('#routeGrid .res');let shown=0;
+    cards.forEach(c=>{
+      const matchT=state.type==='all'||c.dataset.type.split(' ').includes(state.type);
+      const matchR=state.region==='all'||c.dataset.region===state.region;
+      if(matchT&&matchR){c.style.display='';shown++;}else c.style.display='none';});
+    document.getElementById('routeCount').textContent=`Showing ${shown} of ${cards.length} services`;
+  }
+}
+
+function handleContribute(e){
+  e.preventDefault();
+  document.getElementById('contributeForm').style.display='none';
+  document.getElementById('contributeSuccess').style.display='block';
+  window.scrollTo({top:document.getElementById('contributeSuccess').offsetTop-100,behavior:'smooth'});
+}
+</script>
+
+</body>
+</html>
